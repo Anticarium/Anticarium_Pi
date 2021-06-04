@@ -1,5 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
+//#include <wiringPi.h>
+
 
 int main(int argc, char *argv[])
 {
