@@ -4,6 +4,16 @@ set(TARGET_EXE anticarium_test)
 # GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD 11)
 
+set(HEADER_FILES
+  io_tests/IoTest.h
+  )
+
+set(SOURCE_FILES
+    hello_test.cpp
+    io_tests/IoTest.cpp
+    )
+
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -17,8 +27,13 @@ enable_testing()
 
 add_executable(
   ${TARGET_EXE}
-  hello_test.cpp
+  ${HEADER_FILES}
+  ${SOURCE_FILES}
 )
+
+find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
+target_link_libraries(${TARGET_EXE} ${WIRINGPI_LIBRARIES})
+
 target_link_libraries(
   ${TARGET_EXE}
   gtest_main
