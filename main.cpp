@@ -1,10 +1,10 @@
 #include <QCoreApplication>
 #include <QDebug>
-//#include "src/TestClass.h"
+#include "src/TestClass.h"
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     qDebug() << "Hello, User!";
-//    TestClass testClass;
+    TestClass testClass;
     return a.exec();
 }

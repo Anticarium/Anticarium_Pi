@@ -14,4 +14,4 @@ project(${TARGET_NAME} VERSION 0.1 LANGUAGES CXX)
 ADD_LIBRARY(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
 find_package(Qt5Core)
-target_link_libraries(${PROJECT_NAME} private Qt5::Core)
+target_link_libraries(${TARGET_NAME} Qt5::Core)
