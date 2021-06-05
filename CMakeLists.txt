@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(anticarium_pi VERSION 0.1 LANGUAGES CXX)
-
+SET(TARGET_NAME anticarium_pi)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD 11)
+
+project(${TARGET_NAME} VERSION 0.1 LANGUAGES CXX)
+
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(tests)
+
+SET(SOURCE_FILES main.cpp)
+ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES})
 
 find_package(Qt5Core)
+TARGET_LINK_LIBRARIES(${TARGET_NAME} PRIVATE anticarium_lib Qt5::Core)
 
-add_executable(${PROJECT_NAME} "main.cpp")
-
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
