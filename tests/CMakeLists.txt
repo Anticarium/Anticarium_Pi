@@ -36,6 +36,9 @@ add_executable(
 find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
 target_link_libraries(${TARGET_EXE} ${WIRINGPI_LIBRARIES})
 
+include_directories(${anticarium_lib_INCLUDE_DIRS})
+target_link_libraries(${TARGET_EXE} anticarium_lib)
+
 target_link_libraries(
   ${TARGET_EXE}
   gtest_main

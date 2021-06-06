@@ -15,8 +15,14 @@ set(CMAKE_AUTOMOC ON)
 project(${TARGET_NAME} VERSION 0.1 LANGUAGES CXX)
 ADD_LIBRARY(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
+set_target_properties(${TARGET_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(${TARGET_NAME})
+
 find_package(Qt5Core)
 target_link_libraries(${TARGET_NAME} Qt5::Core)
 
 find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
 target_link_libraries(${TARGET_NAME} ${WIRINGPI_LIBRARIES})
+
+set(${TARGET_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
+    CACHE INTERNAL "${TARGET_NAME}: Include Directories" FORCE)
