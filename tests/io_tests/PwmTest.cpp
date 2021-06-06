@@ -11,6 +11,9 @@ TEST(IoTest, TestPwm) {
     delay(3000);
 }
 
+/*
+ * This test just turns off the PWM pin and sets it back to default state.
+*/
 TEST(IoTest, TurnOffPwm) {
     wiringPiSetup() ;
     pinMode(PWM_PIN, INPUT);

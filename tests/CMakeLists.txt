@@ -6,11 +6,13 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(HEADER_FILES
   io_tests/IoTest.h
+  dht11_tests/Dht11Test.h
   )
 
 set(SOURCE_FILES
     io_tests/IoTest.cpp
     io_tests/PwmTest.cpp
+    dht11_tests/Dht11Test.cpp
     )
 
 
