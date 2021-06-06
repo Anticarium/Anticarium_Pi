@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gtest/gtest.h>
-extern "C" {
 #include <wiringPi.h>
-}
+
+#define OUTPUT_PIN 0 //BCM 17
+#define INPUT_PIN 7 //BCM 4

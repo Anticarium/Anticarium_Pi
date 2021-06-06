@@ -9,7 +9,6 @@ set(HEADER_FILES
   )
 
 set(SOURCE_FILES
-    hello_test.cpp
     io_tests/IoTest.cpp
     )
 
