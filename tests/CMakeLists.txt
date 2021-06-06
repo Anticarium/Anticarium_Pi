@@ -10,6 +10,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
     io_tests/IoTest.cpp
+    io_tests/PwmTest.cpp
     )
 
 

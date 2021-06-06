@@ -2,7 +2,7 @@
 
 
 /*
- * This test uses BCM 17, turns it on and off five times.
+ * This test uses BCM 17, turns it on and off 2 times.
  * Test this with LED.
 */
 TEST(IoTest, TestOutput) {
@@ -18,10 +18,11 @@ TEST(IoTest, TestOutput) {
 
 /*
  * This test uses BCM 4, reads it's value.
- * Test this by pulling this pin to 3.3V.
+ * Test this by pulling this pin down using 10k ohm resistor.
 */
 TEST(IoTest, TestInput) {
     wiringPiSetup();
     pinMode(INPUT_PIN, INPUT);
+    pullUpDnControl(INPUT_PIN, PUD_OFF);
     EXPECT_TRUE(digitalRead(INPUT_PIN));
 }
