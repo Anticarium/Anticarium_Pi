@@ -72,5 +72,5 @@ Thumbs.db
 *.exe
 
 # Qt
-CMakeLists.txt.user
+CMakeLists.txt.user*
 
