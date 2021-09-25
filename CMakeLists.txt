@@ -1,22 +1,19 @@
-cmake_minimum_required(VERSION 3.0.0)
-
-SET(TARGET_NAME anticarium_pi)
+cmake_minimum_required(VERSION 3.17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(TARGET_NAME anticarium_pi)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(ExternLibs)
 
+file(READ VERSION CURRENT_VERSION)
+project(${TARGET_NAME} VERSION ${CURRENT_VERSION})
+message(STATUS "Adding ${TARGET_NAME} v${CURRENT_VERSION}")
+configure_file(VersionConfig.h.in ${TARGET_NAME}_VersionConfig.h)
 
-project(${TARGET_NAME} VERSION 0.1 LANGUAGES CXX)
+FETCHSHAREDTYPES()
 
 add_subdirectory(apps/server_app)
-#ADD_SUBDIRECTORY(src)
-#ADD_SUBDIRECTORY(tests)
-
-#SET(SOURCE_FILES main.cpp)
-#ADD_EXECUTABLE(${TARGET_NAME} ${SOURCE_FILES})
-
-#find_package(Qt5Core)
-#TARGET_LINK_LIBRARIES(${TARGET_NAME} PRIVATE anticarium_lib Qt5::Core)
 
