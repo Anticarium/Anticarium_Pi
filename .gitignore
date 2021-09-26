@@ -74,6 +74,3 @@ Thumbs.db
 # Qt
 CMakeLists.txt.user*
 
-# Conan
-conan/
-
