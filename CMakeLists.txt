@@ -7,15 +7,18 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 include(ExternLibs)
+include(HunterGate)
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
+    SHA1 "3319fe6a3b08090df7df98dee75134d68e2ef5a3"
+)
 
 file(READ VERSION CURRENT_VERSION)
 project(${TARGET_NAME} VERSION ${CURRENT_VERSION})
 message(STATUS "Adding ${TARGET_NAME} v${CURRENT_VERSION}")
 configure_file(VersionConfig.h.in ${TARGET_NAME}_VersionConfig.h)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/conan/conanbuildinfo.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/conan/conan_paths.cmake)
-conan_basic_setup()
+hunter_add_package(nlohmann_json)
 
 FETCHSHAREDTYPES()
 
