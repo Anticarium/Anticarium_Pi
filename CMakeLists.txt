@@ -23,4 +23,6 @@ hunter_add_package(nlohmann_json)
 FETCHSHAREDTYPES()
 
 add_subdirectory(apps/server_app)
+add_subdirectory(src)
+
 

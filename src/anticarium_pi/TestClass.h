@@ -1,11 +1,10 @@
 #ifndef TESTCLASS_H
 #define TESTCLASS_H
 
-//#include <QObject>
+#include <QObject>
 
-class TestClass
-{
-public:
+class TestClass {
+  public:
     TestClass();
 };
 
