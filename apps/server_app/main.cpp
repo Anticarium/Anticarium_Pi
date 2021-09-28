@@ -1,8 +1,11 @@
 #include <QCoreApplication>
-#include <QDebug>
-#include <shared_types/Control.h>
+#include <anticarium_pi/AnticariumManager.h>
+#include <anticarium_pi/config/ApplicationSettings.h>
+
 int main(int argc, char* argv[]) {
     QCoreApplication a(argc, argv);
-    qDebug() << "Hello, User!";
+    ApplicationSettings::instance(QCoreApplication::applicationDirPath(), QCoreApplication::instance());
+    AnticariumManager anticariumManager;
+    anticariumManager.run();
     return a.exec();
 }
