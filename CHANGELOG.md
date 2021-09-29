@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: PID library https://github.com/nicholastmosher/PID
+- ADD: `libs` folder for libraries 
 - MODIFY: Changed tests CMake structure to be just like in rest of the project
 - ADD: WeatherEmulator class for managing PIDs
 - ADD: ApplicationManager as main class for anticarium_pi
