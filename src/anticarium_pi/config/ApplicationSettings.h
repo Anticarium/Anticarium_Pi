@@ -1,5 +1,6 @@
 #pragma once
 #include <QObject>
+#include <pid/PID.h>
 #include <shared_types/Control.h>
 
 class ApplicationSettings : public QObject {

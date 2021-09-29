@@ -18,7 +18,7 @@ add_library(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
 target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CURRENT_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs
 )
 
 target_link_libraries(${TARGET_NAME} PRIVATE anticarium_additional_libs)
