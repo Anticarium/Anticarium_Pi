@@ -1,10 +1,10 @@
 #include <anticarium_pi/WeatherManager.h>
 
 WeatherManager::WeatherManager(const shared_types::Control& control, QObject* parent) {
-    sampleTimer = new QTimer(this);
+    weatherEmulator = new WeatherEmulator(this);
+    sampleTimer     = new QTimer(this);
     connect(sampleTimer, &QTimer::timeout, this, &WeatherManager::sample);
     sampleTimer->setInterval(SAMPLE_TIMEOUT);
-    weatherEmulator = new WeatherEmulator(this);
 }
 
 void WeatherManager::run() {
