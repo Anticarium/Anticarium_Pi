@@ -1,5 +1,5 @@
 #pragma once
-#include <anticarium_pi/WeatherEmulator.h>
+#include <anticarium_pi/WeatherManager.h>
 
 class AnticariumManager : public QObject {
     Q_OBJECT
@@ -9,5 +9,5 @@ class AnticariumManager : public QObject {
     virtual ~AnticariumManager();
 
   private:
-    WeatherEmulator* weatherEmulator = nullptr;
+    WeatherManager* weatherManager = nullptr;
 };

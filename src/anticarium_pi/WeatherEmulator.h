@@ -1,46 +1,45 @@
 #pragma once
 #include <QObject>
-#include <QTimer>
 #include <memory>
 #include <pid/PID.h>
-#include <shared_types/Control.h>
-#include <shared_types/SensorData.h>
 
 class WeatherEmulator : public QObject {
     Q_OBJECT
   public:
-    WeatherEmulator(const shared_types::Control& control, QObject* parent = nullptr);
+    WeatherEmulator(QObject* parent = nullptr);
 
     /*
-     * Starts sampling timer
+     * Sets target temperature for temperature PID
      */
-    void run();
-
-
-    shared_types::SensorData getSensorData() const;
+    void setTargetTemperature(float targetTemperature);
 
     /*
-     * Sets this->control to new value
-     * Takes this->control variable and uses its values as new targets for PIDs
+     * Sets target moisture for moisture PID
      */
-    void setControl(const shared_types::Control& control);
+    void setTargetMoisture(int targetMoisture);
 
     /*
-     * Tells to turn on/off the heating mat
+     * Returns true if PID calculated to heat
      */
-    void heat(bool set);
+    bool calculateHeatToggle(float currentTempearture);
 
+    /*
+     * Returns true if PID calculated to water
+     */
+    bool calculateMoistureToggle(int currentMoisture);
+
+    void setHeat(bool heat);
+    void setWater(bool water);
+    float getCurrentTemperature();
+    int getCurrentMoisture();
     virtual ~WeatherEmulator();
 
   private:
-    shared_types::Control control;
+    float currentTemperature = 0.0f;
+    int currentMoisture      = 0;
 
+    bool heat  = false;
+    bool water = false;
     std::unique_ptr<PIDController<float>> temperaturePid;
-    QTimer* sampleTimer      = nullptr;
-    const int SAMPLE_TIMEOUT = 5000;
-
-    /*
-     * Sample sensor data and output according to PIDs
-     */
-    void sample();
+    std::unique_ptr<PIDController<int>> moisturePid;
 };

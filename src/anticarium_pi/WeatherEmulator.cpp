@@ -3,14 +3,26 @@
 static WeatherEmulator* weatherEmulator = nullptr;
 
 static float temperatureFeedback() {
-    return weatherEmulator->getSensorData().getTemperature();
+    return weatherEmulator->getCurrentTemperature();
 }
 
 static void temperatureOutput(float output) {
     if (output > 0) {
-        weatherEmulator->heat(true);
+        weatherEmulator->setHeat(true);
     } else {
-        weatherEmulator->heat(false);
+        weatherEmulator->setHeat(false);
+    }
+}
+
+static int moistureFeedback() {
+    return weatherEmulator->getCurrentMoisture();
+}
+
+static void moistureOutput(int output) {
+    if (output > 0) {
+        weatherEmulator->setWater(true);
+    } else {
+        weatherEmulator->setWater(false);
     }
 }
 
@@ -22,39 +34,48 @@ static unsigned long timeFunction() {
     return static_cast<unsigned long>(count);
 }
 
-WeatherEmulator::WeatherEmulator(const shared_types::Control& control, QObject* parent) : QObject(parent) {
+WeatherEmulator::WeatherEmulator(QObject* parent) : QObject(parent) {
     weatherEmulator = this;
     temperaturePid  = std::make_unique<PIDController<float>>(1, 1, 1, temperatureFeedback, temperatureOutput);
     temperaturePid->registerTimeFunction(timeFunction);
-
-    sampleTimer = new QTimer(this);
-    connect(sampleTimer, &QTimer::timeout, this, &WeatherEmulator::sample);
-    sampleTimer->setInterval(SAMPLE_TIMEOUT);
-
-    setControl(control);
+    moisturePid = std::make_unique<PIDController<int>>(1, 1, 1, moistureFeedback, moistureOutput);
+    moisturePid->registerTimeFunction(timeFunction);
 }
 
-void WeatherEmulator::run() {
-    // sample for first time before timer
-    sample();
-
-    sampleTimer->start();
+void WeatherEmulator::setTargetTemperature(float targetTemperature) {
+    temperaturePid->setTarget(targetTemperature);
 }
 
-shared_types::SensorData WeatherEmulator::getSensorData() const {
-    return shared_types::SensorData(); // TODO change to real object
+void WeatherEmulator::setTargetMoisture(int targetMoisture) {
+    moisturePid->setTarget(targetMoisture);
 }
 
-void WeatherEmulator::setControl(const shared_types::Control& control) {
-    this->control = control;
-    temperaturePid->setTarget(control.getTemperature());
-}
-
-void WeatherEmulator::heat(bool set) {
-}
-
-void WeatherEmulator::sample() {
+bool WeatherEmulator::calculateHeatToggle(float currentTempearture) {
+    this->currentTemperature = currentTempearture;
     temperaturePid->tick();
+    return heat;
+}
+
+bool WeatherEmulator::calculateMoistureToggle(int currentMoisture) {
+    this->currentMoisture = currentMoisture;
+    moisturePid->tick();
+    return water;
+}
+
+void WeatherEmulator::setHeat(bool heat) {
+    this->heat = heat;
+}
+
+void WeatherEmulator::setWater(bool water) {
+    this->water = water;
+}
+
+float WeatherEmulator::getCurrentTemperature() {
+    return currentTemperature;
+}
+
+int WeatherEmulator::getCurrentMoisture() {
+    return currentMoisture;
 }
 
 WeatherEmulator::~WeatherEmulator() {
