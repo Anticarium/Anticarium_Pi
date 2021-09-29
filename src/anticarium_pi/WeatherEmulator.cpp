@@ -1,18 +1,81 @@
 #include <anticarium_pi/AnticariumManager.h>
 
-WeatherEmulator::WeatherEmulator(const shared_types::Control& control, QObject* parent) : QObject(parent) {
-    this->control = control;
+static WeatherEmulator* weatherEmulator = nullptr;
+
+static float temperatureFeedback() {
+    return weatherEmulator->getCurrentTemperature();
 }
 
-void WeatherEmulator::run() {
+static void temperatureOutput(float output) {
+    if (output > 0) {
+        weatherEmulator->setHeat(true);
+    } else {
+        weatherEmulator->setHeat(false);
+    }
 }
 
-shared_types::SensorData WeatherEmulator::getSensorData() const {
-    return shared_types::SensorData(); // TODO change to real object
+static int moistureFeedback() {
+    return weatherEmulator->getCurrentMoisture();
 }
 
-void WeatherEmulator::setControl(const shared_types::Control& control) {
-    this->control = control;
+static void moistureOutput(int output) {
+    if (output > 0) {
+        weatherEmulator->setWater(true);
+    } else {
+        weatherEmulator->setWater(false);
+    }
+}
+
+static unsigned long timeFunction() {
+    std::chrono::time_point now          = std::chrono::system_clock::now();
+    std::chrono::duration timeSinceEpoch = now.time_since_epoch();
+    std::chrono::duration millis         = std::chrono::duration_cast<std::chrono::milliseconds>(timeSinceEpoch);
+    long long count                      = millis.count();
+    return static_cast<unsigned long>(count);
+}
+
+WeatherEmulator::WeatherEmulator(QObject* parent) : QObject(parent) {
+    weatherEmulator = this;
+    temperaturePid  = std::make_unique<PIDController<float>>(1, 1, 1, temperatureFeedback, temperatureOutput);
+    temperaturePid->registerTimeFunction(timeFunction);
+    moisturePid = std::make_unique<PIDController<int>>(1, 1, 1, moistureFeedback, moistureOutput);
+    moisturePid->registerTimeFunction(timeFunction);
+}
+
+void WeatherEmulator::setTargetTemperature(float targetTemperature) {
+    temperaturePid->setTarget(targetTemperature);
+}
+
+void WeatherEmulator::setTargetMoisture(int targetMoisture) {
+    moisturePid->setTarget(targetMoisture);
+}
+
+bool WeatherEmulator::calculateHeatToggle(float currentTempearture) {
+    this->currentTemperature = currentTempearture;
+    temperaturePid->tick();
+    return heat;
+}
+
+bool WeatherEmulator::calculateMoistureToggle(int currentMoisture) {
+    this->currentMoisture = currentMoisture;
+    moisturePid->tick();
+    return water;
+}
+
+void WeatherEmulator::setHeat(bool heat) {
+    this->heat = heat;
+}
+
+void WeatherEmulator::setWater(bool water) {
+    this->water = water;
+}
+
+float WeatherEmulator::getCurrentTemperature() {
+    return currentTemperature;
+}
+
+int WeatherEmulator::getCurrentMoisture() {
+    return currentMoisture;
 }
 
 WeatherEmulator::~WeatherEmulator() {

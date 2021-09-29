@@ -4,11 +4,11 @@
 AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
     ApplicationSettings* settings = ApplicationSettings::instance();
 
-    weatherEmulator = new WeatherEmulator(settings->getControl(), this);
+    weatherManager = new WeatherManager(settings->getControl(), this);
 }
 
 void AnticariumManager::run() {
-    weatherEmulator->run();
+    weatherManager->run();
 }
 
 AnticariumManager::~AnticariumManager() {

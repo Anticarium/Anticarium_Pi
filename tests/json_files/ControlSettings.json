@@ -4,6 +4,6 @@
   "rain_status":true,
   "light_percentage":23,
   "wind_percentage":12,
-  "humidity_percentage": 76,
+  "moisture_percentage": 76,
   "temperature": 32.4
 }

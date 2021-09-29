@@ -11,7 +11,7 @@ TEST(TestApplicationSettings, TestRead) {
     shared_types::Control savedControl       = applicationSettings->getControl();
     ASSERT_EQ(savedControl.getTemperature(), 32.4f);
     ASSERT_EQ(savedControl.getWindPercentage(), 12);
-    ASSERT_EQ(savedControl.getHumidityPercentage(), 76);
+    ASSERT_EQ(savedControl.getMoisturePercentage(), 76);
 }
 
 TEST(TestApplicationSettings, TestSave) {

@@ -13,6 +13,7 @@ class ApplicationSettings : public QObject {
 
     shared_types::Control getControl();
     void saveControl(const shared_types::Control& control);
+
     /*
      * Reads shared_types::Control saved in json file and writes it to control variable
      */
