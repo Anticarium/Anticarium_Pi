@@ -18,7 +18,7 @@ shared_types::SensorData WeatherManager::getSensorData() const {
 
 void WeatherManager::setControl(const shared_types::Control& control) {
     weatherEmulator->setTargetTemperature(control.getTemperature());
-    weatherEmulator->setTargetMoisture(control.getHumidityPercentage());
+    weatherEmulator->setTargetMoisture(control.getMoisturePercentage());
 }
 
 void WeatherManager::sample() {
