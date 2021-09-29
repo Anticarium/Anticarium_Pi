@@ -22,8 +22,12 @@ add_executable(${TARGET_NAME}
 
 configure_file(TestDataDirectory.h.in  ${TEST_DATA_DIR_HEADER_PATH}/TestDataDirectory.h)
 
-target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${TEST_DATA_DIR_HEADER_PATH})
-target_link_libraries(${TARGET_NAME} PRIVATE anticarium_lib)
+target_include_directories(${TARGET_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${TEST_DATA_DIR_HEADER_PATH}
+    ${CMAKE_SOURCE_DIR}/src
+)
+target_link_libraries(${TARGET_NAME} PRIVATE anticarium_pi_lib)
 
 ADDJSON(${TARGET_NAME})
 ADDGTEST(${TARGET_NAME})

@@ -49,6 +49,7 @@ void ApplicationSettings::saveControl(const shared_types::Control& control) {
         try {
             json = control;
             jsonFile.write(QString::fromStdString(json.dump()).toUtf8());
+            this->control = control;
         } catch (nlohmann::json::exception& e) {
             qWarning() << e.what();
         }
@@ -57,4 +58,5 @@ void ApplicationSettings::saveControl(const shared_types::Control& control) {
 }
 
 ApplicationSettings::~ApplicationSettings() {
+    applicationSettings = nullptr;
 }
