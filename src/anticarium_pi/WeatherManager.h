@@ -5,6 +5,7 @@
 #include <shared_types/SensorData.h>
 
 class WeatherManager : public QObject {
+    Q_OBJECT
   public:
     WeatherManager(const shared_types::Control& control, QObject* parent = nullptr);
     /*
