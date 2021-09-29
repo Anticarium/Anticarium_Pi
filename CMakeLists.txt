@@ -26,4 +26,8 @@ FETCHSHAREDTYPES()
 add_subdirectory(apps/server_app)
 add_subdirectory(src)
 
+if(ADD_${TARGET_NAME}_TESTS)
+    add_subdirectory(tests)
+endif()
+
 
