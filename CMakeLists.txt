@@ -19,8 +19,15 @@ message(STATUS "Adding ${TARGET_NAME} v${CURRENT_VERSION}")
 configure_file(VersionConfig.h.in ${TARGET_NAME}_VersionConfig.h)
 
 hunter_add_package(nlohmann_json)
+find_package(Qt5 COMPONENTS Core)
 
 FETCHSHAREDTYPES()
 
 add_subdirectory(apps/server_app)
+add_subdirectory(src)
+
+if(ADD_${TARGET_NAME}_TESTS)
+    add_subdirectory(tests)
+endif()
+
 

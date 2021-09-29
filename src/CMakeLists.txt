@@ -1,25 +1,23 @@
 set(HEADER_FILES
-    TestClass.h
-    dht11_pi/Dht11.h
+    anticarium_pi/AnticariumManager.h
+    anticarium_pi/WeatherEmulator.h
+    anticarium_pi/config/ApplicationSettings.h
     )
 
 set(SOURCE_FILES
-    TestClass.cpp
-    dht11_pi/Dht11.cpp
+    anticarium_pi/AnticariumManager.cpp
+    anticarium_pi/WeatherEmulator.cpp
+    anticarium_pi/config/ApplicationSettings.cpp
     )
 
-SET(TARGET_NAME anticarium_lib)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
+set(TARGET_NAME anticarium_pi_lib)
 
-project(${TARGET_NAME} VERSION 0.1 LANGUAGES CXX)
-ADD_LIBRARY(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
+include(ExternLibs)
 
-find_package(Qt5Core)
-target_link_libraries(${TARGET_NAME} Qt5::Core)
+add_library(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
-find_library(WIRINGPI_LIBRARIES NAMES wiringPi)
-target_link_libraries(${TARGET_NAME} ${WIRINGPI_LIBRARIES})
+target_include_directories(${TARGET_NAME} PRIVATE ${CURRENT_SOURCE_DIR})
 
-set(${TARGET_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
-    CACHE INTERNAL "${TARGET_NAME}: Include Directories" FORCE)
+ADDSHAREDTYPES(${TARGET_NAME})
+ADDQT5CORE(${TARGET_NAME})
+ADDJSON(${TARGET_NAME})
