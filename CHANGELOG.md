@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: WeatherManager for managing WeatherEmulator and I2C communication object
+- ADD: Temperature and moisture PIDs
 - ADD: PID library https://github.com/nicholastmosher/PID
 - ADD: `libs` folder for libraries 
 - MODIFY: Changed tests CMake structure to be just like in rest of the project
