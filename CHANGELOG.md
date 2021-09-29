@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+## 1.0.0
 - ADD: WeatherManager for managing WeatherEmulator and upcomming I2C communication object
 - ADD: Temperature and moisture PIDs
 - ADD: PID library https://github.com/nicholastmosher/PID
