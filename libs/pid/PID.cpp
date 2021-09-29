@@ -67,36 +67,34 @@
  * @param (*pidSource) The function pointer for retrieving system feedback.
  * @param (*pidOutput) The function pointer for delivering system output.
  */
-template <class T>
-PIDController<T>::PIDController(double p, double i, double d, T (*pidSource)(), void (*pidOutput)(T output))
-{
-  _p = p;
-  _i = i;
-  _d = d;
-  target = 0;
-  output = 0;
-  enabled = true;
-  currentFeedback = 0;
-  lastFeedback = 0;
-  error = 0;
-  lastError = 0;
-  currentTime = 0L;
-  lastTime = 0L;
-  integralCumulation = 0;
-  maxCumulation = 30000;
-  cycleDerivative = 0;
+template <class T> PIDController<T>::PIDController(double p, double i, double d, T (*pidSource)(), void (*pidOutput)(T output)) {
+    _p                 = p;
+    _i                 = i;
+    _d                 = d;
+    target             = 0;
+    output             = 0;
+    enabled            = true;
+    currentFeedback    = 0;
+    lastFeedback       = 0;
+    error              = 0;
+    lastError          = 0;
+    currentTime        = 0L;
+    lastTime           = 0L;
+    integralCumulation = 0;
+    maxCumulation      = 30000;
+    cycleDerivative    = 0;
 
-  inputBounded = false;
-  inputLowerBound = 0;
-  inputUpperBound = 0;
-  outputBounded = false;
-  outputLowerBound = 0;
-  outputUpperBound = 0;
-  feedbackWrapped = false;
+    inputBounded     = false;
+    inputLowerBound  = 0;
+    inputUpperBound  = 0;
+    outputBounded    = false;
+    outputLowerBound = 0;
+    outputUpperBound = 0;
+    feedbackWrapped  = false;
 
-  timeFunctionRegistered = false;
-  _pidSource = pidSource;
-  _pidOutput = pidOutput;
+    timeFunctionRegistered = false;
+    _pidSource             = pidSource;
+    _pidOutput             = pidOutput;
 }
 
 /**
@@ -106,120 +104,114 @@ PIDController<T>::PIDController(double p, double i, double d, T (*pidSource)(), 
  * fast as the source of the feedback in order to provide the highest
  * resolution of control (for example, to be placed in the loop() method).
  */
-template <class T>
-void PIDController<T>::tick()
-{
-  if(enabled)
-  {
-    //Retrieve system feedback from user callback.
-    currentFeedback = _pidSource();
+template <class T> void PIDController<T>::tick() {
+    if (enabled) {
+        // Retrieve system feedback from user callback.
+        currentFeedback = _pidSource();
 
-    //Apply input bounds if necessary.
-    if(inputBounded)
-    {
-      if(currentFeedback > inputUpperBound) currentFeedback = inputUpperBound;
-      if(currentFeedback < inputLowerBound) currentFeedback = inputLowerBound;
+        // Apply input bounds if necessary.
+        if (inputBounded) {
+            if (currentFeedback > inputUpperBound)
+                currentFeedback = inputUpperBound;
+            if (currentFeedback < inputLowerBound)
+                currentFeedback = inputLowerBound;
+        }
+
+        /*
+         * Feedback wrapping causes two distant numbers to appear adjacent to one
+         * another for the purpose of calculating the system's error.
+         */
+        if (feedbackWrapped) {
+            /*
+             * There are three ways to traverse from one point to another in this setup.
+             *
+             *    1)  Target --> Feedback
+             *
+             * The other two ways involve bridging a gap connected by the upper and
+             * lower bounds of the feedback wrap.
+             *
+             *    2)  Target --> Upper Bound == Lower Bound --> Feedback
+             *
+             *    3)  Target --> Lower Bound == Upper Bound --> Feedback
+             *
+             * Of these three paths, one should always be shorter than the other two,
+             * unless all three are equal, in which case it does not matter which path
+             * is taken.
+             */
+            int regErr  = target - currentFeedback;
+            int altErr1 = (target - feedbackWrapLowerBound) + (feedbackWrapUpperBound - currentFeedback);
+            int altErr2 = (feedbackWrapUpperBound - target) + (currentFeedback - feedbackWrapLowerBound);
+
+            // Calculate the absolute values of each error.
+            int regErrAbs  = (regErr >= 0) ? regErr : -regErr;
+            int altErr1Abs = (altErr1 >= 0) ? altErr1 : -altErr1;
+            int altErr2Abs = (altErr2 >= 0) ? altErr2 : -altErr2;
+
+            // Use the error with the smallest absolute value
+            if (regErrAbs <= altErr1Abs && regErr <= altErr2Abs) // If reguErrAbs is smallest
+            {
+                error = regErr;
+            } else if (altErr1Abs < regErrAbs && altErr1Abs < altErr2Abs) // If altErr1Abs is smallest
+            {
+                error = altErr1Abs;
+            } else if (altErr2Abs < regErrAbs && altErr2Abs < altErr1Abs) // If altErr2Abs is smallest
+            {
+                error = altErr2Abs;
+            }
+        } else {
+            // Calculate the error between the feedback and the target.
+            error = target - currentFeedback;
+        }
+
+        // If we have a registered way to retrieve the system time, use time in PID calculations.
+        if (timeFunctionRegistered) {
+            // Retrieve system time
+            currentTime = _getSystemTime();
+
+            // Calculate time since last tick() cycle.
+            long deltaTime = currentTime - lastTime;
+
+            // Calculate the integral of the feedback data since last cycle.
+            int cycleIntegral = (lastError + error / 2) * deltaTime;
+
+            // Add this cycle's integral to the integral cumulation.
+            integralCumulation += cycleIntegral;
+
+            // Calculate the slope of the line with data from the current and last cycles.
+            cycleDerivative = (error - lastError) / deltaTime;
+
+            // Save time data for next iteration.
+            lastTime = currentTime;
+        }
+        // If we have no way to retrieve system time, estimate calculations.
+        else {
+            integralCumulation += error;
+            cycleDerivative = (error - lastError);
+        }
+
+        // Prevent the integral cumulation from becoming overwhelmingly huge.
+        if (integralCumulation > maxCumulation)
+            integralCumulation = maxCumulation;
+        if (integralCumulation < -maxCumulation)
+            integralCumulation = -maxCumulation;
+
+        // Calculate the system output based on data and PID gains.
+        output = (int)((error * _p) + (integralCumulation * _i) + (cycleDerivative * _d));
+
+        // Save a record of this iteration's data.
+        lastFeedback = currentFeedback;
+        lastError    = error;
+
+        // Trim the output to the bounds if needed.
+        if (outputBounded) {
+            if (output > outputUpperBound)
+                output = outputUpperBound;
+            if (output < outputLowerBound)
+                output = outputLowerBound;
+        }
+
+        _pidOutput(output);
     }
-
-    /*
-     * Feedback wrapping causes two distant numbers to appear adjacent to one
-     * another for the purpose of calculating the system's error.
-     */
-    if(feedbackWrapped)
-    {
-      /*
-       * There are three ways to traverse from one point to another in this setup.
-       *
-       *    1)  Target --> Feedback
-       *
-       * The other two ways involve bridging a gap connected by the upper and
-       * lower bounds of the feedback wrap.
-       *
-       *    2)  Target --> Upper Bound == Lower Bound --> Feedback
-       *
-       *    3)  Target --> Lower Bound == Upper Bound --> Feedback
-       *
-       * Of these three paths, one should always be shorter than the other two,
-       * unless all three are equal, in which case it does not matter which path
-       * is taken.
-       */
-      int regErr = target - currentFeedback;
-      int altErr1 = (target - feedbackWrapLowerBound) + (feedbackWrapUpperBound - currentFeedback);
-      int altErr2 = (feedbackWrapUpperBound - target) + (currentFeedback - feedbackWrapLowerBound);
-
-      //Calculate the absolute values of each error.
-      int regErrAbs = (regErr >= 0) ? regErr : -regErr;
-      int altErr1Abs = (altErr1 >= 0) ? altErr1 : -altErr1;
-      int altErr2Abs = (altErr2 >= 0) ? altErr2 : -altErr2;
-
-      //Use the error with the smallest absolute value
-      if(regErrAbs <= altErr1Abs && regErr <= altErr2Abs) //If reguErrAbs is smallest
-      {
-        error = regErr;
-      }
-      else if(altErr1Abs < regErrAbs && altErr1Abs < altErr2Abs) //If altErr1Abs is smallest
-      {
-        error = altErr1Abs;
-      }
-      else if(altErr2Abs < regErrAbs && altErr2Abs < altErr1Abs) //If altErr2Abs is smallest
-      {
-        error = altErr2Abs;
-      }
-    }
-    else
-    {
-      //Calculate the error between the feedback and the target.
-      error = target - currentFeedback;
-    }
-
-    //If we have a registered way to retrieve the system time, use time in PID calculations.
-    if(timeFunctionRegistered)
-    {
-      //Retrieve system time
-      currentTime = _getSystemTime();
-
-      //Calculate time since last tick() cycle.
-      long deltaTime = currentTime - lastTime;
-
-      //Calculate the integral of the feedback data since last cycle.
-      int cycleIntegral = (lastError + error / 2) * deltaTime;
-
-      //Add this cycle's integral to the integral cumulation.
-      integralCumulation += cycleIntegral;
-
-      //Calculate the slope of the line with data from the current and last cycles.
-      cycleDerivative = (error - lastError) / deltaTime;
-
-      //Save time data for next iteration.
-      lastTime = currentTime;
-    }
-    //If we have no way to retrieve system time, estimate calculations.
-    else
-    {
-      integralCumulation += error;
-      cycleDerivative = (error - lastError);
-    }
-
-    //Prevent the integral cumulation from becoming overwhelmingly huge.
-    if(integralCumulation > maxCumulation) integralCumulation = maxCumulation;
-    if(integralCumulation < -maxCumulation) integralCumulation = -maxCumulation;
-
-    //Calculate the system output based on data and PID gains.
-    output = (int) ((error * _p) + (integralCumulation * _i) + (cycleDerivative * _d));
-
-    //Save a record of this iteration's data.
-    lastFeedback = currentFeedback;
-    lastError = error;
-
-    //Trim the output to the bounds if needed.
-    if(outputBounded)
-    {
-      if(output > outputUpperBound) output = outputUpperBound;
-      if(output < outputLowerBound) output = outputLowerBound;
-    }
-
-    _pidOutput(output);
-  }
 }
 
 /**
@@ -227,20 +219,16 @@ void PIDController<T>::tick()
  * correction outputs indended to guide the feedback variable (such
  * as position, velocity, etc.) toward the established target.
  */
-template <class T>
-void PIDController<T>::setTarget(T t)
-{
-  target = t;
+template <class T> void PIDController<T>::setTarget(T t) {
+    target = t;
 }
 
 /**
  * Returns the current target of this PIDController.
  * @return The current target of this PIDController.
  */
-template <class T>
-T PIDController<T>::getTarget()
-{
-  return target;
+template <class T> T PIDController<T>::getTarget() {
+    return target;
 }
 
 /**
@@ -249,126 +237,101 @@ T PIDController<T>::getTarget()
  * provided in the constructor of this PIDController.
  * @return The latest output generated by this PIDController.
  */
-template <class T>
-T PIDController<T>::getOutput()
-{
-  return output;
+template <class T> T PIDController<T>::getOutput() {
+    return output;
 }
 
 /**
  * Returns the last read feedback of this PIDController.
  * @return The
  */
-template <class T>
-T PIDController<T>::getFeedback()
-{
-  return currentFeedback;
+template <class T> T PIDController<T>::getFeedback() {
+    return currentFeedback;
 }
 
 /**
  * Returns the last calculated error of this PIDController.
  * @return The last calculated error of this PIDController.
  */
-template <class T>
-T PIDController<T>::getError()
-{
-  return error;
+template <class T> T PIDController<T>::getError() {
+    return error;
 }
 
 /**
  * Enables or disables this PIDController.
  * @param True to enable, False to disable.
  */
-template <class T>
-void PIDController<T>::setEnabled(bool e)
-{
-  //If the PIDController was enabled and is being disabled.
-  if(!e && enabled)
-  {
-    output = 0;
-    integralCumulation = 0;
-  }
-  enabled = e;
+template <class T> void PIDController<T>::setEnabled(bool e) {
+    // If the PIDController was enabled and is being disabled.
+    if (!e && enabled) {
+        output             = 0;
+        integralCumulation = 0;
+    }
+    enabled = e;
 }
 
 /**
  * Tells whether this PIDController is enabled.
  * @return True for enabled, false for disabled.
  */
-template <class T>
-bool PIDController<T>::isEnabled()
-{
-  return enabled;
+template <class T> bool PIDController<T>::isEnabled() {
+    return enabled;
 }
 
 /**
  * Returns the value that the Proportional component is contributing to the output.
  * @return The value that the Proportional component is contributing to the output.
  */
-template <class T>
-T PIDController<T>::getProportionalComponent()
-{
-  return (T) (error * _p);
+template <class T> T PIDController<T>::getProportionalComponent() {
+    return (T)(error * _p);
 }
 
 /**
  * Returns the value that the Integral component is contributing to the output.
  * @return The value that the Integral component is contributing to the output.
  */
-template <class T>
-T PIDController<T>::getIntegralComponent()
-{
-  return (T) (integralCumulation * _i);
+template <class T> T PIDController<T>::getIntegralComponent() {
+    return (T)(integralCumulation * _i);
 }
 
 /**
  * Returns the value that the Derivative component is contributing to the output.
  * @return The value that the Derivative component is contributing to the output.
  */
-template <class T>
-T PIDController<T>::getDerivativeComponent()
-{
-  return (T) (cycleDerivative * _d);
+template <class T> T PIDController<T>::getDerivativeComponent() {
+    return (T)(cycleDerivative * _d);
 }
 
 /**
  * Sets the maximum value that the integral cumulation can reach.
  * @param max The maximum value of the integral cumulation.
  */
-template <class T>
-void PIDController<T>::setMaxIntegralCumulation(T max)
-{
-  //If the new max value is less than 0, invert to make positive.
-  if(max < 0)
-  {
-    max = -max;
-  }
+template <class T> void PIDController<T>::setMaxIntegralCumulation(T max) {
+    // If the new max value is less than 0, invert to make positive.
+    if (max < 0) {
+        max = -max;
+    }
 
-  //If the new max is not more than 1 then the cumulation is useless.
-  if(max > 1)
-  {
-    maxCumulation = max;
-  }
+    // If the new max is not more than 1 then the cumulation is useless.
+    if (max > 1) {
+        maxCumulation = max;
+    }
 }
 
 /**
  * Returns the maximum value that the integral value can cumulate to.
  * @return The maximum value that the integral value can cumulate to.
  */
-template <class T>
-T PIDController<T>::getMaxIntegralCumulation()
-{
-  return maxCumulation;
+template <class T> T PIDController<T>::getMaxIntegralCumulation() {
+    return maxCumulation;
 }
 
 /**
  * Returns the current cumulative integral value in this PIDController.
  * @return The current cumulative integral value in this PIDController.
  */
-template <class T>
-T PIDController<T>::getIntegralCumulation()
-{
-  return integralCumulation;
+template <class T> T PIDController<T>::getIntegralCumulation() {
+    return integralCumulation;
 }
 
 /**
@@ -377,20 +340,16 @@ T PIDController<T>::getIntegralCumulation()
  * Outlying values will be trimmed to the upper or lower bound as necessary.
  * @param bounded True to enable input bounds, False to disable.
  */
-template <class T>
-void PIDController<T>::setInputBounded(bool bounded)
-{
-  inputBounded = bounded;
+template <class T> void PIDController<T>::setInputBounded(bool bounded) {
+    inputBounded = bounded;
 }
 
 /**
  * Returns whether the input of this PIDController is being bounded.
  * @return True if the input of this PIDController is being bounded.
  */
-template <class T>
-bool PIDController<T>::isInputBounded()
-{
-  return inputBounded;
+template <class T> bool PIDController<T>::isInputBounded() {
+    return inputBounded;
 }
 
 /**
@@ -400,35 +359,28 @@ bool PIDController<T>::isInputBounded()
  * @param lower The lower input bound.
  * @param upper The upper input bound.
  */
-template <class T>
-void PIDController<T>::setInputBounds(T lower, T upper)
-{
-  if(upper > lower)
-  {
-    inputBounded = true;
-    inputUpperBound = upper;
-    inputLowerBound = lower;
-  }
+template <class T> void PIDController<T>::setInputBounds(T lower, T upper) {
+    if (upper > lower) {
+        inputBounded    = true;
+        inputUpperBound = upper;
+        inputLowerBound = lower;
+    }
 }
 
 /**
  * Returns the lower input bound of this PIDController.
  * @return The lower input bound of this PIDController.
  */
-template <class T>
-T PIDController<T>::getInputLowerBound()
-{
-  return inputLowerBound;
+template <class T> T PIDController<T>::getInputLowerBound() {
+    return inputLowerBound;
 }
 
 /**
  * Returns the upper input bound of this PIDController.
  * @return The upper input bound of this PIDController.
  */
-template <class T>
-T PIDController<T>::getInputUpperBound()
-{
-  return inputUpperBound;
+template <class T> T PIDController<T>::getInputUpperBound() {
+    return inputUpperBound;
 }
 
 /**
@@ -436,20 +388,16 @@ T PIDController<T>::getInputUpperBound()
  * values that this PIDController will ever generate as output.
  * @param bounded True to enable output bounds, False to disable.
  */
-template <class T>
-void PIDController<T>::setOutputBounded(bool bounded)
-{
-  outputBounded = bounded;
+template <class T> void PIDController<T>::setOutputBounded(bool bounded) {
+    outputBounded = bounded;
 }
 
 /**
  * Returns whether the output of this PIDController is being bounded.
  * @return True if the output of this PIDController is being bounded.
  */
-template <class T>
-bool PIDController<T>::isOutputBounded()
-{
-  return outputBounded;
+template <class T> bool PIDController<T>::isOutputBounded() {
+    return outputBounded;
 }
 
 /**
@@ -459,35 +407,28 @@ bool PIDController<T>::isOutputBounded()
  * @param lower The lower output bound.
  * @param upper The upper output bound.
  */
-template <class T>
-void PIDController<T>::setOutputBounds(T lower, T upper)
-{
-  if(upper > lower)
-  {
-    outputBounded = true;
-    outputLowerBound = lower;
-    outputUpperBound = upper;
-  }
+template <class T> void PIDController<T>::setOutputBounds(T lower, T upper) {
+    if (upper > lower) {
+        outputBounded    = true;
+        outputLowerBound = lower;
+        outputUpperBound = upper;
+    }
 }
 
 /**
  * Returns the lower output bound of this PIDController.
  * @return The lower output bound of this PIDController.
  */
-template <class T>
-T PIDController<T>::getOutputLowerBound()
-{
-  return outputLowerBound;
+template <class T> T PIDController<T>::getOutputLowerBound() {
+    return outputLowerBound;
 }
 
 /**
  * Returns the upper output bound of this PIDController.
  * @return The upper output bound of this PIDController.
  */
-template <class T>
-T PIDController<T>::getOutputUpperBound()
-{
-  return outputUpperBound;
+template <class T> T PIDController<T>::getOutputUpperBound() {
+    return outputUpperBound;
 }
 
 /**
@@ -499,20 +440,16 @@ T PIDController<T>::getOutputUpperBound()
  * of -10 rather than 350.
  * @param wrapped True to enable feedback wrapping, False to disable.
  */
-template <class T>
-void PIDController<T>::setFeedbackWrapped(bool wrapped)
-{
-  feedbackWrapped = wrapped;
+template <class T> void PIDController<T>::setFeedbackWrapped(bool wrapped) {
+    feedbackWrapped = wrapped;
 }
 
 /**
  * Returns whether this PIDController has feedback wrap.
  * @return Whether this PIDController has feedback wrap.
  */
-template <class T>
-bool PIDController<T>::isFeedbackWrapped()
-{
-  return feedbackWrapped;
+template <class T> bool PIDController<T>::isFeedbackWrapped() {
+    return feedbackWrapped;
 }
 
 /**
@@ -522,35 +459,29 @@ bool PIDController<T>::isFeedbackWrapped()
  * @param lower The lower wrap bound.
  * @param upper The upper wrap bound.
  */
-template <class T>
-void PIDController<T>::setFeedbackWrapBounds(T lower, T upper)
-{
-  //Make sure no value outside this circular range is ever input.
-  setInputBounds(lower, upper);
+template <class T> void PIDController<T>::setFeedbackWrapBounds(T lower, T upper) {
+    // Make sure no value outside this circular range is ever input.
+    setInputBounds(lower, upper);
 
-  feedbackWrapped = true;
-  feedbackWrapLowerBound = lower;
-  feedbackWrapUpperBound = upper;
+    feedbackWrapped        = true;
+    feedbackWrapLowerBound = lower;
+    feedbackWrapUpperBound = upper;
 }
 
 /**
  * Returns the lower feedback wrap bound.
  * @return The lower feedback wrap bound.
  */
-template <class T>
-T PIDController<T>::getFeedbackWrapLowerBound()
-{
-  return feedbackWrapLowerBound;
+template <class T> T PIDController<T>::getFeedbackWrapLowerBound() {
+    return feedbackWrapLowerBound;
 }
 
 /**
  * Returns the upper feedback wrap bound.
  * @return The upper feedback wrap bound.
  */
-template <class T>
-T PIDController<T>::getFeedbackWrapUpperBound()
-{
-  return feedbackWrapUpperBound;
+template <class T> T PIDController<T>::getFeedbackWrapUpperBound() {
+    return feedbackWrapUpperBound;
 }
 
 /**
@@ -559,72 +490,58 @@ T PIDController<T>::getFeedbackWrapUpperBound()
  * @param i The new integral gain.
  * @param d The new derivative gain.
  */
-template <class T>
-void PIDController<T>::setPID(double p, double i, double d)
-{
-  _p = p;
-  _i = i;
-  _d = d;
+template <class T> void PIDController<T>::setPID(double p, double i, double d) {
+    _p = p;
+    _i = i;
+    _d = d;
 }
 
 /**
  * Sets a new value for the proportional gain.
  * @param p The new proportional gain.
  */
-template <class T>
-void PIDController<T>::setP(double p)
-{
-  _p = p;
+template <class T> void PIDController<T>::setP(double p) {
+    _p = p;
 }
 
 /**
  * Sets a new value for the integral gain.
  * @param i The new integral gain.
  */
-template <class T>
-void PIDController<T>::setI(double i)
-{
-  _i = i;
+template <class T> void PIDController<T>::setI(double i) {
+    _i = i;
 }
 
 /**
  * Sets a new value for the derivative gain.
  * @param d The new derivative gain.
  */
-template <class T>
-void PIDController<T>::setD(double d)
-{
-  _d = d;
+template <class T> void PIDController<T>::setD(double d) {
+    _d = d;
 }
 
 /**
  * Returns the proportional gain.
  * @return The proportional gain.
  */
-template <class T>
-double PIDController<T>::getP()
-{
-  return _p;
+template <class T> double PIDController<T>::getP() {
+    return _p;
 }
 
 /**
  * Returns the integral gain.
  * @return The integral gain.
  */
-template <class T>
-double PIDController<T>::getI()
-{
-  return _i;
+template <class T> double PIDController<T>::getI() {
+    return _i;
 }
 
 /**
  * Returns the derivative gain.
  * @return The derivative gain.
  */
-template <class T>
-double PIDController<T>::getD()
-{
-  return _d;
+template <class T> double PIDController<T>::getD() {
+    return _d;
 }
 
 /**
@@ -643,10 +560,8 @@ double PIDController<T>::getD()
  *
  * @param (*getFeedback) A function pointer that retrieves system feedback.
  */
-template <class T>
-void PIDController<T>::setPIDSource(T (*pidSource)())
-{
-  _pidSource = pidSource;
+template <class T> void PIDController<T>::setPIDSource(T (*pidSource)()) {
+    _pidSource = pidSource;
 }
 
 /**
@@ -665,10 +580,8 @@ void PIDController<T>::setPIDSource(T (*pidSource)())
  *
  * @param (*onUpdate) A function pointer that delivers system output.
  */
-template <class T>
-void PIDController<T>::setPIDOutput(void (*pidOutput)(T output))
-{
-  _pidOutput = pidOutput;
+template <class T> void PIDController<T>::setPIDOutput(void (*pidOutput)(T output)) {
+    _pidOutput = pidOutput;
 }
 
 /**
@@ -684,11 +597,9 @@ void PIDController<T>::setPIDOutput(void (*pidOutput)(T output))
  *
  * @param (*getSystemTime) Pointer to a function that returns system time.
  */
-template <class T>
-void PIDController<T>::registerTimeFunction(unsigned long (*getSystemTime)())
-{
-  _getSystemTime = getSystemTime;
-  timeFunctionRegistered = true;
+template <class T> void PIDController<T>::registerTimeFunction(unsigned long (*getSystemTime)()) {
+    _getSystemTime         = getSystemTime;
+    timeFunctionRegistered = true;
 }
 
 /*

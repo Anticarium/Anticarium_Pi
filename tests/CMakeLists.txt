@@ -26,6 +26,7 @@ target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${TEST_DATA_DIR_HEADER_PATH}
     ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/libs
 )
 target_link_libraries(${TARGET_NAME} PRIVATE anticarium_pi_lib)
 

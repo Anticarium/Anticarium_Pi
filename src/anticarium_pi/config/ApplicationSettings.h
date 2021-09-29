@@ -1,5 +1,6 @@
 #pragma once
 #include <QObject>
+#include <memory>
 #include <pid/PID.h>
 #include <shared_types/Control.h>
 
@@ -14,6 +15,7 @@ class ApplicationSettings : public QObject {
 
     shared_types::Control getControl();
     void saveControl(const shared_types::Control& control);
+
     /*
      * Reads shared_types::Control saved in json file and writes it to control variable
      */
@@ -22,6 +24,8 @@ class ApplicationSettings : public QObject {
   private:
     static ApplicationSettings* applicationSettings;
     ApplicationSettings(const QString& directoryPath, QObject* parent = nullptr);
+
+    std::unique_ptr<PIDController<float>> temperaturePid;
 
     shared_types::Control control;
     QString directoryPath;
