@@ -3,6 +3,7 @@ set(HEADER_FILES
     anticarium_pi/WeatherEmulator.h
     anticarium_pi/WeatherManager.h
     anticarium_pi/config/ApplicationSettings.h
+    anticarium_pi/I2cTalker.h
     )
 
 set(SOURCE_FILES
@@ -10,6 +11,7 @@ set(SOURCE_FILES
     anticarium_pi/WeatherEmulator.cpp
     anticarium_pi/WeatherManager.cpp
     anticarium_pi/config/ApplicationSettings.cpp
+    anticarium_pi/I2cTalker.cpp
     )
 
 set(TARGET_NAME anticarium_pi_lib)
