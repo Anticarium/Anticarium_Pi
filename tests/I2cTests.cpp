@@ -4,6 +4,8 @@
 #include <sys/ioctl.h>     //Needed for I2C port
 #include <unistd.h>        //Needed for I2C port
 
+// TODO: Test if I2COutput and I2CInput have no conflicts sharing one file
+
 TEST(TestI2c, TestI2cDevices) {
     int file_i2c;
     int length;
