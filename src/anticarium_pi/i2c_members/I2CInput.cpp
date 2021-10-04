@@ -19,6 +19,9 @@ bool I2CInput::connectI2c() {
     return connected;
 }
 
+I2CInput::~I2CInput() {
+}
+
 shared_types::SensorData I2CInput::getSensorData() {
     return sensorData;
 }

@@ -27,14 +27,14 @@ TEST(TestI2c, TestI2cDevices) {
 
 
     //    //----- READ BYTES -----
-    length = 4;                                   //<<< Number of bytes to read
-    if (read(file_i2c, buffer, length) != length) // read() returns the number of bytes actually read, if it doesn't match then an error occurred (e.g. no response from the device)
-    {
-        // ERROR HANDLING: i2c transaction failed
-        printf("Failed to read from the i2c bus.\n");
-    } else {
-        printf("Data read: %s\n", buffer);
-    }
+    //    length = 4;                                   //<<< Number of bytes to read
+    //    if (read(file_i2c, buffer, length) != length) // read() returns the number of bytes actually read, if it doesn't match then an error occurred (e.g. no response from the device)
+    //    {
+    //        // ERROR HANDLING: i2c transaction failed
+    //        printf("Failed to read from the i2c bus.\n");
+    //    } else {
+    //        printf("Data read: %s\n", buffer);
+    //    }
 
 
     //----- WRITE BYTES -----

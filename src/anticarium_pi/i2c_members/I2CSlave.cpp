@@ -9,7 +9,7 @@ I2CSlave::I2CSlave(const I2CSlaveParameters& parameters, QObject* parent)
 : QObject(parent), FILE_NAME(parameters.fileName), FILE_ACTION(parameters.fileAction), ADDRESS(parameters.address), BUFFER_SIZE(parameters.bufferSize) {
 }
 
-bool I2CSlave::connect() {
+bool I2CSlave::connectI2c() {
     // Open I2c bus
     file = open(FILE_NAME.data(), FILE_ACTION);
     if (file < 0) {
