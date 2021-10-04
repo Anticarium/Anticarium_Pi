@@ -18,8 +18,7 @@ class I2CSlave : public QObject {
      * Connects to I2C slave
      * Returns true if connected, and false if failed to connect
      */
-    bool connect();
-
+    virtual bool connectI2c();
     virtual ~I2CSlave();
 
   protected:
