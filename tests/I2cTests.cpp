@@ -39,7 +39,7 @@ TEST(TestI2c, TestI2cDevices) {
 
     //----- WRITE BYTES -----
     buffer[0] = 2;
-    buffer[1] = 255;
+    buffer[1] = 0;
     length    = 2;                                 //<<< Number of bytes to write
     if (write(file_i2c, buffer, length) != length) // write() returns the number of bytes actually written, if it doesn't match then an error occurred (e.g. no response from the device)
     {
