@@ -2,13 +2,12 @@
 #include <anticarium_pi/config/ApplicationSettings.h>
 
 AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
-    ApplicationSettings* settings = ApplicationSettings::instance();
-
-    weatherManager = new WeatherManager(settings->getControl(), this);
+    weatherManager = new WeatherManager(this);
 }
 
 void AnticariumManager::run() {
-    weatherManager->run();
+    ApplicationSettings* settings = ApplicationSettings::instance();
+    weatherManager->run(settings->getControl());
 }
 
 AnticariumManager::~AnticariumManager() {
