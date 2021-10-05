@@ -1,7 +1,6 @@
 #pragma once
+#include <anticarium_pi/I2CWorker.h>
 #include <anticarium_pi/WeatherManager.h>
-#include <anticarium_pi/i2c_members/I2CInput.h>
-#include <anticarium_pi/i2c_members/I2COutput.h>
 
 class AnticariumManager : public QObject {
     Q_OBJECT
@@ -12,9 +11,5 @@ class AnticariumManager : public QObject {
 
   private:
     WeatherManager* weatherManager = nullptr;
-    I2COutput* i2cOutput           = nullptr;
-    I2CInput* i2cInput             = nullptr;
-
-    void initializeI2c();
-    void connectI2c();
+    I2CWorker* i2cWorker           = nullptr;
 };

@@ -5,25 +5,21 @@ AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
     ApplicationSettings* settings = ApplicationSettings::instance();
 
     weatherManager = new WeatherManager(settings->getControl(), this);
+
+    I2CWorkerParameters outputParameters;
+    outputParameters.address    = 0;
+    outputParameters.bufferSize = 2;
+    I2CWorkerParameters inputParameters;
+    inputParameters.address    = 1;
+    inputParameters.bufferSize = 3;
+
+    i2cWorker = new I2CWorker(outputParameters, inputParameters, this);
 }
 
 void AnticariumManager::run() {
+    i2cWorker->connectI2c(1000);
     weatherManager->run();
 }
 
 AnticariumManager::~AnticariumManager() {
-}
-
-void AnticariumManager::initializeI2c() {
-    // TODO: Add values for parameters
-    I2CSlaveParameters inputParameters;
-    I2CSlaveParameters outputParameters;
-
-    i2cOutput = new I2COutput(outputParameters, this);
-    i2cInput  = new I2CInput(1000, inputParameters, this);
-}
-
-void AnticariumManager::connectI2c() {
-    i2cOutput->connectI2c();
-    i2cInput->connectI2c();
 }
