@@ -1,18 +1,19 @@
 #pragma once
 #include <QTimer>
-#include <anticarium_pi/I2CWorker.h>
 #include <anticarium_pi/WeatherEmulator.h>
+#include <anticarium_pi/i2c_members/I2CInput.h>
+#include <anticarium_pi/i2c_members/I2COutput.h>
 #include <shared_types/Control.h>
 #include <shared_types/SensorData.h>
 
 class WeatherManager : public QObject {
     Q_OBJECT
   public:
-    WeatherManager(const shared_types::Control& control, QObject* parent = nullptr);
+    WeatherManager(QObject* parent = nullptr);
     /*
      * Starts sampling timer
      */
-    void run();
+    void run(const shared_types::Control& initialControl);
 
     shared_types::SensorData getSensorData() const;
 
@@ -36,5 +37,6 @@ class WeatherManager : public QObject {
      */
     void sample();
 
-    I2CWorker* i2cWorker = nullptr;
+    I2CInput* i2cInput   = nullptr;
+    I2COutput* i2cOutput = nullptr;
 };
