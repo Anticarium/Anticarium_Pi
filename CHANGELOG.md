@@ -1,7 +1,7 @@
 # Anticarium_Pi
 
 - ADD: I2C output from WeatherManager
-- ADD: I2C Input and output classes
+- ADD: I2C input and output classes
 
 ## 1.0.0
 - ADD: WeatherManager for managing WeatherEmulator and upcomming I2C communication object
