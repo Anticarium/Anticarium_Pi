@@ -36,8 +36,8 @@ shared_types::SensorData WeatherManager::getSensorData() const {
 }
 
 void WeatherManager::setControl(const shared_types::Control& control) {
-    weatherEmulator->setTargetTemperature(control.getTemperature());
     weatherEmulator->setTargetMoisture(control.getMoisturePercentage());
+    weatherEmulator->setTargetTemperature(control.getTemperature());
 
     i2cOutput->send(I2COutput::OutputType::LED, static_cast<unsigned char>(control.getLightPercentage()));
     i2cOutput->send(I2COutput::OutputType::FAN, static_cast<unsigned char>(control.getWindPercentage()));
