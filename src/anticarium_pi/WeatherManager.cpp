@@ -1,7 +1,6 @@
-#include <QDebug>
 #include <anticarium_pi/WeatherManager.h>
 
-WeatherManager::WeatherManager(QObject* parent) {
+WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     weatherEmulator = new WeatherEmulator(this);
     sampleTimer     = new QTimer(this);
     i2cFetchTimer   = new QTimer(this);
