@@ -1,5 +1,4 @@
 #pragma once
-#include <anticarium_pi/I2CWorker.h>
 #include <anticarium_pi/WeatherManager.h>
 
 class AnticariumManager : public QObject {
@@ -11,5 +10,4 @@ class AnticariumManager : public QObject {
 
   private:
     WeatherManager* weatherManager = nullptr;
-    I2CWorker* i2cWorker           = nullptr;
 };

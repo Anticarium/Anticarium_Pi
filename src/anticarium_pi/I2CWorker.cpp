@@ -1,4 +1,5 @@
 #include <anticarium_pi/I2CWorker.h>
+#include <anticarium_pi/helper/AnticariumFunctions.hpp>
 #include <fcntl.h>         //Needed for I2C port
 #include <linux/i2c-dev.h> //Needed for I2C port
 #include <memory>
@@ -7,11 +8,9 @@
 
 I2CWorker::I2CWorker(const I2CWorkerParameters& outputParameters, const I2CWorkerParameters& inputParameters, QObject* parent)
 : QObject(parent), OUTPUT_PARAMETERS(outputParameters), INPUT_PARAMETERS(inputParameters) {
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &I2CWorker::fetchData);
 }
 
-bool I2CWorker::connectI2c(int timeout) {
+bool I2CWorker::connectI2c() {
     // Open I2c bus
     i2cFile = open(FILE_NAME.data(), O_RDWR);
     if (i2cFile < 0) {
@@ -24,7 +23,6 @@ bool I2CWorker::connectI2c(int timeout) {
         return false;
     }
 
-    timer->start(timeout);
     return true;
 }
 
@@ -49,21 +47,19 @@ void I2CWorker::fetchData() {
             sensorData.setHumidity(value);
         } break;
         case 'm': {
-            sensorData.setMoisture(convertMoisture(value));
+            int mappedMoisture = map<int>(value, MIN_ANALOG_MOISTURE, MAX_ANALOG_MOISTURE, 0, 100);
+            sensorData.setMoisture(mappedMoisture);
         } break;
         default: { } break; }
     }
 }
 
-
-int I2CWorker::convertMoisture(int value) {
-    // map using linear interpolation
-    int result = ((value - MIN_ANALOG_MOISTURE) / (MAX_ANALOG_MOISTURE - MIN_ANALOG_MOISTURE)) * 100;
-    return result;
-}
-
 bool I2CWorker::send(I2CWorker::OutputType outputType, unsigned char value) {
     std::unique_ptr<unsigned char[]> buffer = std::make_unique<unsigned char[]>(OUTPUT_PARAMETERS.bufferSize);
+
+    if (outputType == LED || outputType == FAN) {
+        value = map<unsigned char>(value, 0, 100, 0, 255);
+    }
 
     buffer[0] = outputType;
     buffer[1] = value;

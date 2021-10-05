@@ -4,6 +4,7 @@ set(HEADER_FILES
     anticarium_pi/WeatherManager.h
     anticarium_pi/config/ApplicationSettings.h
     anticarium_pi/I2CWorker.h
+    anticarium_pi/helper/AnticariumFunctions.hpp
     )
 
 set(SOURCE_FILES

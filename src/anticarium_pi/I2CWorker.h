@@ -1,5 +1,5 @@
 #pragma once
-#include <QTimer>
+#include <QObject>
 #include <shared_types/SensorData.h>
 
 struct I2CWorkerParameters {
@@ -18,7 +18,7 @@ class I2CWorker : public QObject {
      * Pass input fetch timeout
      * Returns true if connected, and false if failed to connect
      */
-    bool connectI2c(int timeout);
+    bool connectI2c();
 
     enum OutputType { LED = 2, FAN = 3, HEAT = 9, WATER = 10 };
 
@@ -42,10 +42,7 @@ class I2CWorker : public QObject {
     const I2CWorkerParameters OUTPUT_PARAMETERS;
     const I2CWorkerParameters INPUT_PARAMETERS;
 
-    QTimer* timer = nullptr;
     shared_types::SensorData sensorData;
-
-    int convertMoisture(int value);
 
     const int MIN_ANALOG_MOISTURE = 17;
     const int MAX_ANALOG_MOISTURE = 1023;

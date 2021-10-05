@@ -1,5 +1,6 @@
 #pragma once
 #include <QTimer>
+#include <anticarium_pi/I2CWorker.h>
 #include <anticarium_pi/WeatherEmulator.h>
 #include <shared_types/Control.h>
 #include <shared_types/SensorData.h>
@@ -25,11 +26,15 @@ class WeatherManager : public QObject {
   private:
     WeatherEmulator* weatherEmulator = nullptr;
 
-    QTimer* sampleTimer      = nullptr;
-    const int SAMPLE_TIMEOUT = 5000;
+    QTimer* sampleTimer         = nullptr;
+    QTimer* i2cFetchTimer       = nullptr;
+    const int I2C_FETCH_TIMEOUT = 500;
+    const int SAMPLE_TIMEOUT    = 3000;
 
     /*
      * Sample sensor data and output according to PIDs
      */
     void sample();
+
+    I2CWorker* i2cWorker = nullptr;
 };
