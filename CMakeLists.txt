@@ -19,6 +19,8 @@ message(STATUS "Adding ${TARGET_NAME} v${CURRENT_VERSION}")
 configure_file(VersionConfig.h.in ${TARGET_NAME}_VersionConfig.h)
 
 hunter_add_package(nlohmann_json)
+hunter_add_package(spdlog)
+
 find_package(Qt5 COMPONENTS Core)
 
 FETCHSHAREDTYPES()
