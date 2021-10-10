@@ -7,8 +7,8 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 ### Git repository setup
 1. Generate your ssh key and add it to github according to this tutorial: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 2. `$ cd ~/Desktop`
-3. `git config --global user.email "you@example.com"`
-4. `git config --global user.name "Your Name"`
+3. `$ git config --global user.email "you@example.com"`
+4. `$ git config --global user.name "Your Name"`
 5. `$ mkdir ./Anticarium_Pi`
 6. `$ cd ./Anticarium_Pi`
 7. `$ git clone https://github.com/Anticarium/Anticarium_Pi.git	`
