@@ -15,7 +15,7 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 8. `$ git remote set-url origin git@github.com:Anticarium/Anticarium_Pi.git`
 9. `$ cd`
 10. `$ git clone https://github.com/Anticarium/Anticarium_Doc.git`
-11.`$ cp ~/Desktop/Anticarium_Doc/.clang-format ~/Desktop/Anticarium_Pi/Anticarium_Pi`
+11. `$ cp ~/Desktop/Anticarium_Doc/.clang-format ~/Desktop/Anticarium_Pi/Anticarium_Pi`
 
 ### Install cmake
 
