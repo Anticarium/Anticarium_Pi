@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: Logger, logs under `./log/` relative to program executable
+- ADD: Spdlog HunterGate package
 - ADD: I2C output from WeatherManager
 - ADD: I2C input and output classes
 
