@@ -4,7 +4,7 @@
 
 This guide is made assuming you have Raspbian OS and you are member of Anticarium organization.
 
-### Git repositories setup
+### Git repository setup
 1. Generate your ssh key and add it to github according to this tutorial: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 2. `$ cd ~/Desktop`
 3. `git config --global user.email "you@example.com"`
@@ -16,7 +16,9 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 9. `$ cd`
 9. `$ git clone `https://github.com/Anticarium/Anticarium_Doc.git`
 10. $ cp ~/Desktop/Anticarium_Doc/.clang-format ~/Desktop/Anticarium_Pi/Anticarium_Pi
- 
+
+### Install cmake
+
 
 **Add HunterGate**
 - In main folder `wget https://raw.githubusercontent.com/cpp-pm/gate/master/cmake/HunterGate.cmake -O cmake/HunterGate.cmake` 
