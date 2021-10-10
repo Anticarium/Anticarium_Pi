@@ -3,6 +3,7 @@
 #include <fcntl.h>         //Needed for I2C port
 #include <linux/i2c-dev.h> //Needed for I2C port
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <sys/ioctl.h> //Needed for I2C port
 #include <unistd.h>    //Needed for I2C port
 

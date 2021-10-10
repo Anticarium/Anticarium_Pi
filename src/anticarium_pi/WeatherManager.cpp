@@ -1,4 +1,5 @@
 #include <anticarium_pi/WeatherManager.h>
+#include <spdlog/spdlog.h>
 
 WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     weatherEmulator = new WeatherEmulator(this);
@@ -22,8 +23,20 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
 }
 
 void WeatherManager::run(const shared_types::Control& initialControl) {
-    i2cOutput->connectI2c();
-    i2cInput->connectI2c();
+    bool outputConnected = i2cOutput->connectI2c();
+    bool inputConnected  = i2cInput->connectI2c();
+
+    if (outputConnected) {
+        SPDLOG_INFO("Connected to output i2c");
+    } else {
+        SPDLOG_ERROR("Could not connect to output i2c");
+    }
+
+    if (inputConnected) {
+        SPDLOG_INFO("Connected to input i2c");
+    } else {
+        SPDLOG_ERROR("Could not connect to input i2c");
+    }
 
     setControl(initialControl);
 
@@ -36,6 +49,9 @@ shared_types::SensorData WeatherManager::getSensorData() const {
 }
 
 void WeatherManager::setControl(const shared_types::Control& control) {
+    SPDLOG_INFO(QString("Set target moisture: %1").arg(control.getMoisturePercentage()).toStdString());
+    SPDLOG_INFO(QString("Set target temperature: %1").arg(control.getTemperature()).toStdString());
+
     weatherEmulator->setTargetMoisture(control.getMoisturePercentage());
     weatherEmulator->setTargetTemperature(control.getTemperature());
 
@@ -48,6 +64,9 @@ void WeatherManager::sample() {
 
     bool heat  = weatherEmulator->calculateHeatToggle(sensorData.getTemperature());
     bool water = weatherEmulator->calculateMoistureToggle(sensorData.getMoisture());
+
+    SPDLOG_INFO(QString("Current temperature: %1").arg(sensorData.getTemperature()).toStdString());
+    SPDLOG_INFO(QString("Current moisture: %1").arg(sensorData.getMoisture()).toStdString());
 
     i2cOutput->send(I2COutput::OutputType::HEAT, heat);
     i2cOutput->send(I2COutput::OutputType::WATER, water);

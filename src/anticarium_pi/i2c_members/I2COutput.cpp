@@ -3,6 +3,7 @@
 #include <fcntl.h>         //Needed for I2C port
 #include <linux/i2c-dev.h> //Needed for I2C port
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <sys/ioctl.h> //Needed for I2C port
 #include <unistd.h>    //Needed for I2C port
 
@@ -21,6 +22,7 @@ bool I2COutput::send(I2COutput::OutputType outputType, unsigned char value) {
 
     int bytesWritten = write(file, buffer.get(), PARAMETERS.bufferSize);
 
+    SPDLOG_INFO((QString("Output type: %1, Value: %2").arg(outputType).arg(value)).toStdString());
     return bytesWritten == static_cast<int>(PARAMETERS.bufferSize);
 }
 
