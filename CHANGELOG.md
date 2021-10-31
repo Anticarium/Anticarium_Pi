@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- ADD: Setup guide in `README.md`
 - ADD: Logger, logs under `./log/` relative to program executable
 - ADD: Spdlog HunterGate package
 - ADD: I2C output from WeatherManager
