@@ -32,12 +32,13 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
         return;
     } else {
         content = reply->rawHeader("Anticarium content description");
+        SPDLOG_INFO(QString("Data arrived").toStdString());
     }
 
     // reads reply into QString
     QString answer = reply->readAll();
     nlohmann::json jsonReply;
-    if (content == "Control data") {
+    if (content == "Control") {
         jsonReply = nlohmann::json::parse(answer.toStdString());
 
         shared_types::Control controlData = jsonReply;

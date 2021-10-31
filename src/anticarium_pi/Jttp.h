@@ -41,8 +41,8 @@ class JTTP : public QObject {
     QNetworkRequest networkRequest;
 
     QMap<REQUEST_DATA, QString> requestDataMap = {
-        { REQUEST_DATA::CONTROL_DATA, "control_data" }, // Request Control json url expansion
-        { REQUEST_DATA::SENSOR_DATA, "sensor_data" }    // Request SensorData json url expansion
+        { REQUEST_DATA::CONTROL_DATA, "control" },   // Request Control json url expansion
+        { REQUEST_DATA::SENSOR_DATA, "sensor_data" } // Request SensorData json url expansion
     };
 
     QMap<REQUEST_TYPE, QString> requestTypeMap = {
