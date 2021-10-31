@@ -2,7 +2,6 @@ set(HEADER_FILES
     anticarium_pi/AnticariumManager.h
     anticarium_pi/WeatherEmulator.h
     anticarium_pi/WeatherManager.h
-    anticarium_pi/config/ApplicationSettings.h
     anticarium_pi/helper/AnticariumFunctions.hpp
     anticarium_pi/i2c_members/I2CSlave.h
     anticarium_pi/i2c_members/I2CInput.h
@@ -14,7 +13,6 @@ set(SOURCE_FILES
     anticarium_pi/AnticariumManager.cpp
     anticarium_pi/WeatherEmulator.cpp
     anticarium_pi/WeatherManager.cpp
-    anticarium_pi/config/ApplicationSettings.cpp
     anticarium_pi/i2c_members/I2CSlave.cpp
     anticarium_pi/i2c_members/I2CInput.cpp
     anticarium_pi/i2c_members/I2COutput.cpp

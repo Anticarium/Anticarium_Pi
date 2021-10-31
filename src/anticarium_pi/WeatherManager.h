@@ -10,10 +10,11 @@ class WeatherManager : public QObject {
     Q_OBJECT
   public:
     WeatherManager(QObject* parent = nullptr);
+
     /*
      * Starts sampling timer
      */
-    void run(const shared_types::Control& initialControl);
+    void run();
 
     shared_types::SensorData getSensorData() const;
 

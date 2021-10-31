@@ -11,7 +11,6 @@ set(HEADER_FILES
 set(SOURCE_FILES
     main.cpp
     anticarium_pi_tests/TestsUtility.cpp
-    config/ApplicationSettingsTests.cpp
     WeatherEmulatorTests.cpp
 )
 

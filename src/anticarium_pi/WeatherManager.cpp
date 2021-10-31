@@ -22,7 +22,7 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     sampleTimer->setInterval(SAMPLE_TIMEOUT);
 }
 
-void WeatherManager::run(const shared_types::Control& initialControl) {
+void WeatherManager::run() {
     bool outputConnected = i2cOutput->connectI2c();
     bool inputConnected  = i2cInput->connectI2c();
 
@@ -37,8 +37,6 @@ void WeatherManager::run(const shared_types::Control& initialControl) {
     } else {
         SPDLOG_ERROR("Could not connect to input i2c");
     }
-
-    setControl(initialControl);
 
     i2cFetchTimer->start();
     sampleTimer->start();

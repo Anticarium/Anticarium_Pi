@@ -1,5 +1,4 @@
 #include <anticarium_pi/AnticariumManager.h>
-#include <anticarium_pi/config/ApplicationSettings.h>
 
 AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
     weatherManager      = new WeatherManager(this);
@@ -19,10 +18,10 @@ AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
 }
 
 void AnticariumManager::run() {
+    onRequestControl(); // Request Control for the first time before timer
     fetchControlTimer->start();
     sendSensorDataTimer->start();
-    ApplicationSettings* settings = ApplicationSettings::instance();
-    weatherManager->run(settings->getControl());
+    weatherManager->run();
 }
 
 void AnticariumManager::applyData(const shared_types::Control& control) {
