@@ -1,9 +1,9 @@
 {
-  "auto_status":true,
-  "heat_status":true,
-  "rain_status":true,
   "light_percentage":23,
-  "wind_percentage":12,
-  "moisture_percentage": 76,
-  "temperature": 32.4
+  "wind_percentage":64,
+  "regime_value":
+  {
+	"moisture": 1,
+	"temperature": 15.2
+  }
 }

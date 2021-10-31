@@ -4,8 +4,9 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <shared_types/SensorDataSerializer.hpp>
-#include <shared_types/TerrariumDataSerializer.hpp>
+#include <nlohmann/json.hpp>
+#include <shared_types/Control.h>
+#include <shared_types/SensorData.h>
 
 class JTTP : public QObject {
     Q_OBJECT
@@ -39,9 +40,15 @@ class JTTP : public QObject {
     QNetworkAccessManager* networkAccessManager = nullptr;
     QNetworkRequest networkRequest;
 
-    QMap<REQUEST_DATA, QString> requestDataMap = { { REQUEST_DATA::CONTROL_DATA, "control_data" }, { REQUEST_DATA::SENSOR_DATA, "sensor_data" } };
+    QMap<REQUEST_DATA, QString> requestDataMap = {
+        { REQUEST_DATA::CONTROL_DATA, "control_data" }, // Request Control json url expansion
+        { REQUEST_DATA::SENSOR_DATA, "sensor_data" }    // Request SensorData json url expansion
+    };
 
-    QMap<REQUEST_TYPE, QString> requestTypeMap = { { REQUEST_TYPE::REQUEST, "request" }, { REQUEST_TYPE::SEND, "send" } };
+    QMap<REQUEST_TYPE, QString> requestTypeMap = {
+        { REQUEST_TYPE::REQUEST, "request" }, // Request url expansion
+        { REQUEST_TYPE::SEND, "send" }        // Send url expansion
+    };
 
     // Builds url and does HTTP GET or POST
     void httpSend(REQUEST_TYPE requestType, REQUEST_DATA requestData, const nlohmann::json& passedJson = nlohmann::json());

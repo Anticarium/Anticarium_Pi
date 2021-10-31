@@ -1,6 +1,8 @@
 #include <QHttpMultiPart>
 #include <anticarium_pi/Jttp.h>
 #include <anticarium_pi/config/ApplicationSettings.h>
+#include <shared_types/ControlSerializer.hpp>
+#include <shared_types/SensorDataSerializer.hpp>
 #include <spdlog/spdlog.h>
 
 JTTP::JTTP(QObject* parent) : QObject(parent) {
