@@ -1,3 +1,4 @@
+#include <QEventLoop>
 #include <QHttpMultiPart>
 #include <anticarium_pi/Jttp.h>
 #include <anticarium_pi/config/ApplicationSettings.h>
@@ -56,23 +57,23 @@ void JTTP::onRequestData(REQUEST_DATA requestType) {
 void JTTP::httpSend(REQUEST_TYPE requestType, REQUEST_DATA requestData, const nlohmann::json& passedJson) {
     QString requestTypeString = requestTypeMap[requestType];
     QString requestDataString = requestDataMap[requestData];
-    QString url               = QString("http://87.110.30.10:5000/%1/%2").arg(requestTypeString, requestDataString);
+    QString url               = QString("http://192.168.1.100:5000/%1/%2").arg(requestTypeString).arg(requestDataString);
     QNetworkRequest networkRequest;
     networkRequest.setUrl(url);
 
     if (requestType == REQUEST_TYPE::SEND) {
-        post(networkAccessManager, networkRequest, passedJson);
+        networkRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        networkAccessManager->post(networkRequest, QByteArray::fromStdString(passedJson.dump()));
     } else if (requestType == REQUEST_TYPE::REQUEST) {
         networkAccessManager->get(networkRequest);
     }
-}
 
-void JTTP::post(QNetworkAccessManager* accessManager, const QNetworkRequest& networkRequest, const nlohmann::json& passedJson) {
-    QHttpMultiPart* httpMultiPart = new QHttpMultiPart(this);
-    QHttpPart http;
-    http.setBody(QString::fromStdString(passedJson.dump()).toUtf8());
-    httpMultiPart->append(http);
-    accessManager->post(networkRequest, httpMultiPart);
+    // Wait for request to finish executing
+    QEventLoop loop;
+    connect(networkAccessManager, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    SPDLOG_INFO(QString("Data %1, url: %2").arg(requestTypeString, url).toStdString());
 }
 
 

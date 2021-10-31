@@ -5,7 +5,7 @@ static WeatherEmulator* weatherEmulator = nullptr;
 static float temperatureFeedback() {
     return weatherEmulator->getCurrentTemperature();
 }
-
+#include <QDebug>
 static void temperatureOutput(float output) {
     if (output > 0) {
         weatherEmulator->setHeat(true);

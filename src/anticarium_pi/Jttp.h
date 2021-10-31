@@ -53,8 +53,6 @@ class JTTP : public QObject {
     // Builds url and does HTTP GET or POST
     void httpSend(REQUEST_TYPE requestType, REQUEST_DATA requestData, const nlohmann::json& passedJson = nlohmann::json());
 
-    // POST data
-    void post(QNetworkAccessManager* accessManager, const QNetworkRequest& networkRequest, const nlohmann::json& passedJson);
   signals:
     void dataReceivedEvent(const shared_types::Control& control);
   private slots:

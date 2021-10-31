@@ -6,6 +6,6 @@ TEST(TestWeatherEmulator, TestPIDs) {
     weatherEmulator->setTargetTemperature(23.4f);
     weatherEmulator->setTargetMoisture(76);
 
-    ASSERT_TRUE(weatherEmulator->calculateHeatToggle(21.2f));
     ASSERT_FALSE(weatherEmulator->calculateMoistureToggle(98));
+    ASSERT_TRUE(weatherEmulator->calculateHeatToggle(21.2f));
 }
