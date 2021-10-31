@@ -22,7 +22,7 @@ bool I2COutput::send(I2COutput::OutputType outputType, unsigned char value) {
 
     int bytesWritten = write(file, buffer.get(), PARAMETERS.bufferSize);
 
-    SPDLOG_INFO((QString("Output type: %1, Value: %2").arg(outputType).arg(value)).toStdString());
+    SPDLOG_INFO(QString("Output type: %1, Value: %2").arg(outputType).arg(value).toStdString());
     return bytesWritten == static_cast<int>(PARAMETERS.bufferSize);
 }
 
