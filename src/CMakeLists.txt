@@ -7,6 +7,7 @@ set(HEADER_FILES
     anticarium_pi/i2c_members/I2CSlave.h
     anticarium_pi/i2c_members/I2CInput.h
     anticarium_pi/i2c_members/I2COutput.h
+    anticarium_pi/Jttp.h
     )
 
 set(SOURCE_FILES
@@ -17,6 +18,7 @@ set(SOURCE_FILES
     anticarium_pi/i2c_members/I2CSlave.cpp
     anticarium_pi/i2c_members/I2CInput.cpp
     anticarium_pi/i2c_members/I2COutput.cpp
+    anticarium_pi/Jttp.cpp
     )
 
 set(TARGET_NAME anticarium_pi_lib)
@@ -35,3 +37,4 @@ ADDSHAREDTYPES(${TARGET_NAME})
 ADDQT5CORE(${TARGET_NAME})
 ADDJSON(${TARGET_NAME})
 ADDSPDLOG(${TARGET_NAME})
+ADDQT5NETWORK(${TARGET_NAME})

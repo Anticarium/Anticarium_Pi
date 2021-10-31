@@ -8,6 +8,11 @@ function(ADDQT5CORE TARGET_NAME)
 	target_link_libraries(${TARGET_NAME} PRIVATE Qt5::Core)
 endfunction()
 
+function(ADDQT5NETWORK TARGET_NAME)
+        find_package(Qt5 COMPONENTS Network REQUIRED)
+        target_link_libraries(${TARGET_NAME} PRIVATE Qt5::Network)
+endfunction()
+
 function(ADDJSON TARGET_NAME)
         find_package(nlohmann_json CONFIG REQUIRED)
         target_link_libraries(${TARGET_NAME} PRIVATE nlohmann_json nlohmann_json::nlohmann_json)

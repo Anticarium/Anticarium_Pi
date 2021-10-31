@@ -10,8 +10,16 @@
 class JTTP : public QObject {
     Q_OBJECT
   public:
-    enum class REQUEST_DATA { CONTROL_DATA, SENSOR_DATA };
-    enum class REQUEST_TYPE { REQUEST, SEND };
+    enum class REQUEST_DATA {
+        CONTROL_DATA, // Request Control json
+        SENSOR_DATA   // Request SensorData json
+    };
+
+    enum class REQUEST_TYPE {
+        REQUEST, // Request json
+        SEND     // Send json
+    };
+
     // singleton design pattern
     JTTP()       = delete;
     void operator=(const JTTP&) = delete;

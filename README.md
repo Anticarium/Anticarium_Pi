@@ -46,3 +46,18 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 ## Install clang-format-9
 1. `$ sudo apt install clang-format-9`
 2. Using Anticarium_Doc clang format setup in qt, link against this clang-format binary 
+
+## CLang formatter setup in QT creator
+1. Open Qt creator
+2. Help->About Plugins
+3. Find `Beautifier`
+4. Check `Beautifier` checkbox
+5. Close dialog and restart QT creator
+6. In Qt creator Tools->Options->Beautifier->CLang Format
+7. `clang-format` executable path: `/usr/bin/clang-format-9`
+8. In `Use predefined style` choose `File`
+9. Go to General Tab
+10. Check `Enable auto format on file save`
+11. Under `Tool:` select `ClangFormat`
+12. Ok
+13. Put `.clang-format-9` file found in Anticarium_Doc, into your source directory and rename to `.clang-format`
