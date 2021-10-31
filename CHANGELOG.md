@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+## 1.1.0
 - ADD: Request Control on app startup
 - REMOVE: ApplicationSettings and its tests
 - MODIFY: shared_types v1.3.0
