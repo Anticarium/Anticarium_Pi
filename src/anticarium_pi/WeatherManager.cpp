@@ -22,7 +22,7 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     sampleTimer->setInterval(SAMPLE_TIMEOUT);
 }
 
-void WeatherManager::run(const shared_types::Control& initialControl) {
+void WeatherManager::run() {
     bool outputConnected = i2cOutput->connectI2c();
     bool inputConnected  = i2cInput->connectI2c();
 
@@ -38,8 +38,6 @@ void WeatherManager::run(const shared_types::Control& initialControl) {
         SPDLOG_ERROR("Could not connect to input i2c");
     }
 
-    setControl(initialControl);
-
     i2cFetchTimer->start();
     sampleTimer->start();
 }
@@ -49,11 +47,11 @@ shared_types::SensorData WeatherManager::getSensorData() const {
 }
 
 void WeatherManager::setControl(const shared_types::Control& control) {
-    SPDLOG_INFO(QString("Set target moisture: %1").arg(control.getMoisturePercentage()).toStdString());
-    SPDLOG_INFO(QString("Set target temperature: %1").arg(control.getTemperature()).toStdString());
+    SPDLOG_INFO(QString("Set target moisture: %1").arg(control.getRegimeValue().getMoisture()).toStdString());
+    SPDLOG_INFO(QString("Set target temperature: %1").arg(control.getRegimeValue().getTemperature()).toStdString());
 
-    weatherEmulator->setTargetMoisture(control.getMoisturePercentage());
-    weatherEmulator->setTargetTemperature(control.getTemperature());
+    weatherEmulator->setTargetMoisture(control.getRegimeValue().getMoisture());
+    weatherEmulator->setTargetTemperature(control.getRegimeValue().getTemperature());
 
     i2cOutput->send(I2COutput::OutputType::LED, static_cast<unsigned char>(control.getLightPercentage()));
     i2cOutput->send(I2COutput::OutputType::FAN, static_cast<unsigned char>(control.getWindPercentage()));

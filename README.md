@@ -32,7 +32,7 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 - In Anticarium_Pi source folder `wget https://raw.githubusercontent.com/cpp-pm/gate/master/cmake/HunterGate.cmake -O cmake/HunterGate.cmake` 
 
 ## I2C connection
-1. `sudo mousepad /boot/config.txt`
+1. `$ sudo mousepad /boot/config.txt`
 2. Find the line containing “dtparam=i2c_arm=on” and uncomment it
 3. Add “,i2c_arm_baudrate=9600” where 9600 is the new speed (9,6 Kbit/s). Note the comma.
 4. Should look like this: `dtparam=i2c_arm=on,i2c_arm_baudrate=9600`
@@ -46,3 +46,18 @@ This guide is made assuming you have Raspbian OS and you are member of Anticariu
 ## Install clang-format-9
 1. `$ sudo apt install clang-format-9`
 2. Using Anticarium_Doc clang format setup in qt, link against this clang-format binary 
+
+## CLang formatter setup in QT creator
+1. Open Qt creator
+2. Help->About Plugins
+3. Find `Beautifier`
+4. Check `Beautifier` checkbox
+5. Close dialog and restart QT creator
+6. In Qt creator Tools->Options->Beautifier->CLang Format
+7. `clang-format` executable path: `/usr/bin/clang-format-9`
+8. In `Use predefined style` choose `File`
+9. Go to General Tab
+10. Check `Enable auto format on file save`
+11. Under `Tool:` select `ClangFormat`
+12. Ok
+13. Put `.clang-format-9` file found in Anticarium_Doc, into your source directory and rename to `.clang-format`

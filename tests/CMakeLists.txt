@@ -11,7 +11,6 @@ set(HEADER_FILES
 set(SOURCE_FILES
     main.cpp
     anticarium_pi_tests/TestsUtility.cpp
-    config/ApplicationSettingsTests.cpp
     WeatherEmulatorTests.cpp
 )
 
@@ -33,4 +32,5 @@ target_link_libraries(${TARGET_NAME} PRIVATE anticarium_pi_lib)
 ADDJSON(${TARGET_NAME})
 ADDGTEST(${TARGET_NAME})
 ADDQT5CORE(${TARGET_NAME})
+ADDQT5NETWORK(${TARGET_NAME})
 ADDSHAREDTYPES(${TARGET_NAME})

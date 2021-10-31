@@ -1,5 +1,10 @@
 # Anticarium_Pi
 
+- ADD: Request Control on app startup
+- REMOVE: ApplicationSettings and its tests
+- MODIFY: shared_types v1.3.0
+- MODIFY: AnticariumManager now reads and sends data to server
+- ADD: JTTP class to communicate with server
 - ADD: Setup guide in `README.md`
 - ADD: Logger, logs under `./log/` relative to program executable
 - ADD: Spdlog HunterGate package
