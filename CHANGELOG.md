@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- MODIFY: Changed http response header to "Anticarium_content_description"
+
 ## 1.1.0
 - ADD: Request Control on app startup
 - REMOVE: ApplicationSettings and its tests
