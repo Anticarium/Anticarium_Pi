@@ -30,7 +30,7 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
         SPDLOG_ERROR(QString("QNetworkError: %1").arg(reply->errorString()).toStdString());
         return;
     } else {
-        content = reply->rawHeader("Anticarium content description");
+        content = reply->rawHeader("Anticarium_content_description");
         SPDLOG_INFO(QString("Data arrived").toStdString());
     }
 
@@ -43,6 +43,8 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
         shared_types::Control controlData = jsonReply;
         emit dataReceivedEvent(controlData);
         return;
+    } else {
+        SPDLOG_WARN("Unknown header contents");
     }
 }
 
