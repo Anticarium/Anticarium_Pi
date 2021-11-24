@@ -31,7 +31,7 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
         SPDLOG_ERROR(QString("QNetworkError: %1").arg(reply->errorString()).toStdString());
         return;
     } else {
-        content = reply->rawHeader("Anticarium content description");
+        content = reply->rawHeader("Anticarium_content_description");
         SPDLOG_INFO(QString("Data arrived").toStdString());
     }
 
