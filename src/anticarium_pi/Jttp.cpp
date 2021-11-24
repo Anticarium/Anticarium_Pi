@@ -44,6 +44,8 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
         shared_types::Control controlData = jsonReply;
         emit dataReceivedEvent(controlData);
         return;
+    } else {
+        SPDLOG_WARN("Unknown header contents");
     }
 }
 
