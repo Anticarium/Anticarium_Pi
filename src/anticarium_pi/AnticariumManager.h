@@ -24,11 +24,6 @@ class AnticariumManager : public QObject {
     void sendDataEvent(const shared_types::SensorData& sensorData);
 
   private:
-    enum TIMEOUT {
-        CONTROL     = 1000, // Fetch timeout for Control
-        SENSOR_DATA = 1000  //Fetch timeout for SensorData
-    };
-
     WeatherManager* weatherManager = nullptr;
     QTimer* fetchControlTimer      = nullptr;
     QTimer* sendSensorDataTimer    = nullptr;

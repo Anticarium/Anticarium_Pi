@@ -7,6 +7,7 @@ set(HEADER_FILES
     anticarium_pi/i2c_members/I2CInput.h
     anticarium_pi/i2c_members/I2COutput.h
     anticarium_pi/Jttp.h
+    anticarium_pi/config/ApplicationSettings.h
     )
 
 set(SOURCE_FILES
@@ -17,6 +18,7 @@ set(SOURCE_FILES
     anticarium_pi/i2c_members/I2CInput.cpp
     anticarium_pi/i2c_members/I2COutput.cpp
     anticarium_pi/Jttp.cpp
+    anticarium_pi/config/ApplicationSettings.cpp
     )
 
 set(TARGET_NAME anticarium_pi_lib)

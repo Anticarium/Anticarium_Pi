@@ -28,10 +28,8 @@ class WeatherManager : public QObject {
   private:
     WeatherEmulator* weatherEmulator = nullptr;
 
-    QTimer* sampleTimer         = nullptr;
-    QTimer* i2cFetchTimer       = nullptr;
-    const int I2C_FETCH_TIMEOUT = 500;
-    const int SAMPLE_TIMEOUT    = 3000;
+    QTimer* sampleTimer   = nullptr;
+    QTimer* i2cFetchTimer = nullptr;
 
     /*
      * Sample sensor data and output according to PIDs

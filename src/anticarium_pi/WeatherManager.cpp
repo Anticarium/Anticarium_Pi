@@ -1,4 +1,5 @@
 #include <anticarium_pi/WeatherManager.h>
+#include <anticarium_pi/config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
 WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
@@ -18,8 +19,10 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
 
     connect(i2cFetchTimer, &QTimer::timeout, i2cInput, &I2CInput::fetchData);
     connect(sampleTimer, &QTimer::timeout, this, &WeatherManager::sample);
-    i2cFetchTimer->setInterval(I2C_FETCH_TIMEOUT);
-    sampleTimer->setInterval(SAMPLE_TIMEOUT);
+
+    ApplicationSettings* settings = ApplicationSettings::instance();
+    i2cFetchTimer->setInterval(settings->getI2CFetchTimeout());
+    sampleTimer->setInterval(settings->getPIDSampleTimeout());
 }
 
 void WeatherManager::run() {

@@ -1,5 +1,14 @@
 # Anticarium_Pi
 
+REMOVE: `VersionConfig.h.in` file and cmake script, because it is unused
+ADD: `settings.ini.h` gets copied to build directory as `settings.ini` to become real application settings
+ADD: Application settings class `ApplicationSettings` along with its tests
+ADD: `Anticarium_Server_URL` setting that stores URL to which to make requests
+ADD: `Sensor_Data_send_timeout` setting for sensor data sending to server
+ADD: `Control_Data_fetch_timeout` setting for control data fetching from server
+ADD: `PID_sample_timeout` setting for PID sampling
+ADD: `I2C_fetch_timeout` setting for fetching data from input MCU
+
 ## 1.1.0
 - ADD: Request Control on app startup
 - REMOVE: ApplicationSettings and its tests

@@ -1,12 +1,14 @@
 #include <anticarium_pi/AnticariumManager.h>
+#include <anticarium_pi/config/ApplicationSettings.h>
 
 AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
     weatherManager      = new WeatherManager(this);
     fetchControlTimer   = new QTimer(this);
     sendSensorDataTimer = new QTimer(this);
 
-    fetchControlTimer->setInterval(TIMEOUT::CONTROL);
-    sendSensorDataTimer->setInterval(TIMEOUT::SENSOR_DATA);
+    ApplicationSettings* settings = ApplicationSettings::instance();
+    fetchControlTimer->setInterval(settings->getControlDataFetchTimeout());
+    sendSensorDataTimer->setInterval(settings->getSensorDataSendTimeout());
 
     JTTP* jttp = JTTP::instance();
 

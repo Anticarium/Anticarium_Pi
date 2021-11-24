@@ -1,6 +1,7 @@
 #include <QEventLoop>
 #include <QHttpMultiPart>
 #include <anticarium_pi/Jttp.h>
+#include <anticarium_pi/config/ApplicationSettings.h>
 #include <shared_types/ControlSerializer.hpp>
 #include <shared_types/SensorDataSerializer.hpp>
 #include <spdlog/spdlog.h>
@@ -55,9 +56,11 @@ void JTTP::onRequestData(REQUEST_DATA requestType) {
 }
 
 void JTTP::httpSend(REQUEST_TYPE requestType, REQUEST_DATA requestData, const nlohmann::json& passedJson) {
+    ApplicationSettings* settings = ApplicationSettings::instance();
+
     QString requestTypeString = requestTypeMap[requestType];
     QString requestDataString = requestDataMap[requestData];
-    QString url               = QString("http://192.168.1.100:5000/%1/%2").arg(requestTypeString).arg(requestDataString);
+    QString url               = QString("%1/%2/%3").arg(settings->getAnticariumUrl()).arg(requestTypeString).arg(requestDataString);
     QNetworkRequest networkRequest;
     networkRequest.setUrl(url);
 
