@@ -6,6 +6,8 @@ add_executable(${TARGET_NAME}
     main.cpp
 )
 
+configure_file(${CMAKE_SOURCE_DIR}/settings.ini.in settings.ini)
+
 target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/libs

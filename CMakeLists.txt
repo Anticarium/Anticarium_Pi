@@ -16,7 +16,6 @@ HunterGate(
 file(READ VERSION CURRENT_VERSION)
 project(${TARGET_NAME} VERSION ${CURRENT_VERSION})
 message(STATUS "Adding ${TARGET_NAME} v${CURRENT_VERSION}")
-configure_file(VersionConfig.h.in ${TARGET_NAME}_VersionConfig.h)
 
 hunter_add_package(nlohmann_json)
 hunter_add_package(spdlog)

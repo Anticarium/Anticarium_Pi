@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <anticarium_pi/AnticariumManager.h>
 #include <anticarium_pi/Jttp.h>
+#include <anticarium_pi/config/ApplicationSettings.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/spdlog.h>
@@ -24,6 +25,8 @@ int main(int argc, char* argv[]) {
 
     QCoreApplication a(argc, argv);
     JTTP::instance(QCoreApplication::instance());
+    ApplicationSettings::instance(QCoreApplication::applicationDirPath() + "/settings.ini", QCoreApplication::instance());
+
     AnticariumManager anticariumManager;
     anticariumManager.run();
 
