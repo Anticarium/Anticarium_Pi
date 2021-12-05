@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- MODIFY: Create log file path from QApplication::applicationDirPath()
 - REMOVE: `VersionConfig.h.in` file and cmake script, because it is unused
 - ADD: `settings.ini.h` gets copied to build directory as `settings.ini` to become real application settings
 - ADD: Application settings class `ApplicationSettings` along with its tests
