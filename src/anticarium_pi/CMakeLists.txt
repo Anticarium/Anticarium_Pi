@@ -7,8 +7,7 @@ set(HEADER_FILES
     anticarium_pi/i2c_members/I2CInput.h
     anticarium_pi/i2c_members/I2COutput.h
     anticarium_pi/Jttp.h
-    anticarium_pi/config/ApplicationSettings.h
-    )
+)
 
 set(SOURCE_FILES
     anticarium_pi/AnticariumManager.cpp
@@ -18,8 +17,7 @@ set(SOURCE_FILES
     anticarium_pi/i2c_members/I2CInput.cpp
     anticarium_pi/i2c_members/I2COutput.cpp
     anticarium_pi/Jttp.cpp
-    anticarium_pi/config/ApplicationSettings.cpp
-    )
+)
 
 set(TARGET_NAME anticarium_pi_lib)
 
@@ -28,11 +26,16 @@ include(ExternLibs)
 add_library(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
 target_include_directories(${TARGET_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/src/config
+    ${CMAKE_SOURCE_DIR}/src/anticarium_pi
 )
 
-target_link_libraries(${TARGET_NAME} PRIVATE anticarium_additional_libs)
+target_link_libraries(${TARGET_NAME} PRIVATE
+    anticarium_additional_libs
+    anticarium_config_lib
+)
+
 ADDSHAREDTYPES(${TARGET_NAME})
 ADDQT5CORE(${TARGET_NAME})
 ADDJSON(${TARGET_NAME})

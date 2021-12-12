@@ -1,4 +1,4 @@
-#include <anticarium_pi/config/ApplicationSettings.h>
+#include <config/ApplicationSettings.h>
 
 ApplicationSettings* ApplicationSettings::applicationSettings = nullptr;
 

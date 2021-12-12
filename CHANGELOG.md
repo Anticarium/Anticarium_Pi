@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- MODIFY: Moved `config` folder outside `anticarium_pi`, to be shared between `anticarium_pi` and `anticarium_camera` apps
+- ADD: Structure for camera app development
 - MODIFY: Create log file path from QApplication::applicationDirPath()
 - REMOVE: `VersionConfig.h.in` file and cmake script, because it is unused
 - ADD: `settings.ini.h` gets copied to build directory as `settings.ini` to become real application settings

@@ -1,5 +1,5 @@
 #include <anticarium_pi/AnticariumManager.h>
-#include <anticarium_pi/config/ApplicationSettings.h>
+#include <config/ApplicationSettings.h>
 
 AnticariumManager::AnticariumManager(QObject* parent) : QObject(parent) {
     weatherManager      = new WeatherManager(this);

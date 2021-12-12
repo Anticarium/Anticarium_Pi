@@ -25,7 +25,10 @@ find_package(Qt5 COMPONENTS Core)
 FETCHSHAREDTYPES()
 
 add_subdirectory(apps/server_app)
-add_subdirectory(src)
+add_subdirectory(apps/camera_app)
+add_subdirectory(src/config)
+add_subdirectory(src/anticarium_pi)
+add_subdirectory(src/anticarium_camera)
 add_subdirectory(libs)
 
 if(ADD_${TARGET_NAME}_TESTS)

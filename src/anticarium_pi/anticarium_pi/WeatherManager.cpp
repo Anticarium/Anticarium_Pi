@@ -1,5 +1,5 @@
 #include <anticarium_pi/WeatherManager.h>
-#include <anticarium_pi/config/ApplicationSettings.h>
+#include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
 WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {

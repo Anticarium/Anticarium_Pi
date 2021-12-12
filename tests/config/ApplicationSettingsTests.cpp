@@ -1,5 +1,5 @@
 #include <TestDataDirectory.h>
-#include <anticarium_pi/config/ApplicationSettings.h>
+#include <config/ApplicationSettings.h>
 #include <gtest/gtest.h>
 
 TEST(TestApplicationSettings, TestRead) {
