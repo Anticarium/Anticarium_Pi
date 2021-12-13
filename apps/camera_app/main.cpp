@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <anticarium_camera/AnticariumStream.h>
 #include <config/ApplicationSettings.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
@@ -31,6 +32,9 @@ int main(int argc, char* argv[]) {
     SPDLOG_INFO("Program started");
 
     ApplicationSettings::instance(QCoreApplication::applicationDirPath() + "/settings.ini", QCoreApplication::instance());
+
+    AnticariumStream anticariumStream;
+    anticariumStream.run();
 
     int exit = a.exec();
 
