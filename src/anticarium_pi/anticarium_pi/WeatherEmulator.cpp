@@ -27,10 +27,10 @@ static void moistureOutput(int output) {
 }
 
 static unsigned long timeFunction() {
-    std::chrono::time_point now          = std::chrono::system_clock::now();
-    std::chrono::duration timeSinceEpoch = now.time_since_epoch();
-    std::chrono::duration millis         = std::chrono::duration_cast<std::chrono::milliseconds>(timeSinceEpoch);
-    long long count                      = millis.count();
+    const auto now            = std::chrono::system_clock::now();
+    const auto timeSinceEpoch = now.time_since_epoch();
+    const auto millis         = std::chrono::duration_cast<std::chrono::milliseconds>(timeSinceEpoch);
+    long long count           = millis.count();
     return static_cast<unsigned long>(count);
 }
 

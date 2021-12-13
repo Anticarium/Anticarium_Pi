@@ -27,7 +27,7 @@ target_include_directories(${TARGET_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/src/anticarium_pi
     ${CMAKE_SOURCE_DIR}/src/anticarium_camera
     ${CMAKE_SOURCE_DIR}/src/config
-    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs/pid
 )
 target_link_libraries(${TARGET_NAME} PRIVATE
     anticarium_pi_lib

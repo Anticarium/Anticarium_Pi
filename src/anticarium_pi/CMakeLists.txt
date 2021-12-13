@@ -26,7 +26,7 @@ include(ExternLibs)
 add_library(${TARGET_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
 target_include_directories(${TARGET_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs/pid
     ${CMAKE_SOURCE_DIR}/src/config
     ${CMAKE_SOURCE_DIR}/src/anticarium_pi
 )
