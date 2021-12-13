@@ -1,8 +1,7 @@
 #pragma once
-#include <QTimer>
-#include <QUdpSocket>
-#include <memory>
-#include <raspicam/raspicam.h>
+#include <QThread>
+#include <anticarium_camera/CameraManager.h>
+#include <anticarium_camera/UDPManager.h>
 
 class AnticariumStream : public QObject {
     Q_OBJECT
@@ -11,12 +10,12 @@ class AnticariumStream : public QObject {
     void run();
     virtual ~AnticariumStream();
 
+  signals:
+    void sendImageEvent(const PiImage& image);
+    void requestNewImageEvent();
+
   private:
-    raspicam::RaspiCam camera;
-    QTimer* captureTimer = nullptr;
-
-    // Takes picture and stores it
-    void grab();
-
-    QUdpSocket* udpSocket;
+    UDPManager* udpManager       = nullptr;
+    CameraManager* cameraManager = nullptr;
+    QThread* cameraThread        = nullptr;
 };

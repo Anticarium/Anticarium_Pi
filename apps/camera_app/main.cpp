@@ -6,11 +6,13 @@
 #include <spdlog/spdlog.h>
 
 static void initializeLogger() {
+    qRegisterMetaType<PiImage>("PiImage");
+
     QString qStringPath    = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "logs/AnticariumCaneraLog.log");
     std::string loggerPath = qStringPath.toStdString();
 
-    std::shared_ptr<spdlog::sinks::daily_file_sink_st> dailyLogger = std::make_shared<spdlog::sinks::daily_file_sink_st>(loggerPath, 0, 0, false, 10);
-    std::shared_ptr<spdlog::sinks::stdout_sink_st> consoleLogger   = std::make_shared<spdlog::sinks::stdout_sink_st>();
+    std::shared_ptr<spdlog::sinks::daily_file_sink_mt> dailyLogger = std::make_shared<spdlog::sinks::daily_file_sink_mt>(loggerPath, 0, 0, false, 10);
+    std::shared_ptr<spdlog::sinks::stdout_sink_mt> consoleLogger   = std::make_shared<spdlog::sinks::stdout_sink_mt>();
 
     std::vector<spdlog::sink_ptr> loggerSinks;
 

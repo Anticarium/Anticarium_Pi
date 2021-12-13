@@ -3,13 +3,14 @@ set(HEADER_FILES
     anticarium_camera/UDPManager.h
     anticarium_camera/CameraManager.h
     anticarium_camera/ImageProcess.h
+    anticarium_camera/PiImage.hpp
 )
 
 set(SOURCE_FILES
-    anticarium_camera/AnticariumStream.h
-    anticarium_camera/UDPManager.h
-    anticarium_camera/CameraManager.h
-    anticarium_camera/ImageProcess.h
+    anticarium_camera/AnticariumStream.cpp
+    anticarium_camera/UDPManager.cpp
+    anticarium_camera/CameraManager.cpp
+    anticarium_camera/ImageProcess.cpp
 )
 
 set(TARGET_NAME anticarium_camera_lib)
