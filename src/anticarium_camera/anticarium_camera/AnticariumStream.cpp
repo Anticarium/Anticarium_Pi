@@ -11,11 +11,11 @@ AnticariumStream::AnticariumStream(QObject* parent) : QObject(parent) {
     connect(cameraManager, &CameraManager::sendImageEvent, this, &AnticariumStream::sendImageEvent);
     connect(this, &AnticariumStream::sendImageEvent, udpManager, &UDPManager::onSendImage);
     connect(cameraThread, &QThread::started, cameraManager, &CameraManager::start);
-    connect(udpManager, &UDPManager::dataSentEvent, cameraManager, &CameraManager::onNextImage);
 }
 
 void AnticariumStream::run() {
     cameraThread->start();
+    cameraThread->setPriority(QThread::LowestPriority);
 }
 
 

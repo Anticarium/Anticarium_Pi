@@ -1,5 +1,5 @@
 #pragma once
-#include <QTimer>
+#include <QObject>
 #include <anticarium_camera/PiImage.hpp>
 #include <raspicam/raspicam.h>
 
@@ -9,31 +9,20 @@ class CameraManager : public QObject {
     CameraManager(QObject* parent = nullptr);
     virtual ~CameraManager();
 
+    // Processes grabbed image
+    void grabbed(void* = nullptr);
+
   signals:
     void sendImageEvent(const PiImage& piImage);
 
   public slots:
-    // Allows to send image
-    void onNextImage();
-
     void start();
 
-  private slots:
-    // Takes picture and stores it
-    void grab();
-
+    void startCapture();
 
   private:
     raspicam::RaspiCam camera;
-    QTimer* captureTimer = nullptr;
 
-    bool canSend = true;
-
-    // Keeps track on which image must be sent next
-    unsigned int counter = 0;
-
-    static const int MAX_IMAGES = 5;
-
-    // Stored images
-    std::array<std::shared_ptr<unsigned char[]>, MAX_IMAGES> images;
+    // Stored image
+    std::shared_ptr<unsigned char[]> image;
 };

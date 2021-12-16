@@ -11,8 +11,11 @@ void ImageProcess::writeRowId(PiImage& image) {
 
     // write row number in first elements of each row
     auto height = image.size.height();
-    auto width  = image.size.width();
-    auto row    = image.data.lock().get();
+
+    // Multiplying by 3, because there are colors in pixel
+    auto width = image.size.width() * 3;
+
+    auto row = image.data.lock().get();
     for (int i = 0; i < height; i++) {
         const auto position = width * i;
 

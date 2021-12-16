@@ -9,6 +9,16 @@ ApplicationSettings::ApplicationSettings(const QString& directoryPath, QObject* 
     controlDataFetchTimeout = settings->value("Control_Data_fetch_timeout", 5000).toInt();
     pidSampleTimeout        = settings->value("PID_sample_timeout", 3000).toInt();
     i2cFetchTimeout         = settings->value("I2C_fetch_timeout", 1000).toInt();
+    anticariumUDPPort       = settings->value("Anticarium_UDP_Port", 0).toInt();
+    fps                     = settings->value("FPS", 1).toInt();
+}
+
+int ApplicationSettings::getFps() const {
+    return fps;
+}
+
+int ApplicationSettings::getAnticariumUDPPort() const {
+    return anticariumUDPPort;
 }
 
 ApplicationSettings* ApplicationSettings::instance(const QString& directoryPath, QObject* parent) {
