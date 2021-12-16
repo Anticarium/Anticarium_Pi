@@ -1,7 +1,9 @@
 #pragma once
 #include <QThread>
 #include <anticarium_camera/CameraManager.h>
-#include <anticarium_camera/UDPManager.h>
+#include <anticarium_camera/Client.hpp>
+#include <anticarium_camera/UDPListener.h>
+#include <anticarium_camera/UDPSender.h>
 
 class AnticariumStream : public QObject {
     Q_OBJECT
@@ -11,11 +13,14 @@ class AnticariumStream : public QObject {
     virtual ~AnticariumStream();
 
   signals:
-    void sendImageEvent(const PiImage& image);
     void requestNewImageEvent();
 
   private:
-    UDPManager* udpManager       = nullptr;
+    UDPSender* udpSender         = nullptr;
+    UDPListener* udpListener     = nullptr;
     CameraManager* cameraManager = nullptr;
     QThread* cameraThread        = nullptr;
+    QThread* udpSenderThread     = nullptr;
+
+    Client udpClient;
 };
