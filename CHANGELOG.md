@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+# 1.2.0
 - ADD: UDP sender class `UDPSender`, that sends video to UDP
 - ADD: UDP receiver class `UDPListener`, that decides which client to send data to
 - ADD: Raspicam library
