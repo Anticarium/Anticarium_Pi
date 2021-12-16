@@ -1,6 +1,8 @@
 [General]
 Anticarium_Server_URL="http://192.168.1.103:80"
+Anticarium_UDP_Port=5011
 Sensor_Data_send_timeout=1000
 Control_Data_fetch_timeout=1000
 PID_sample_timeout=3000
 I2C_fetch_timeout=500
+FPS=20

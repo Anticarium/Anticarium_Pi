@@ -1,13 +1,13 @@
 #include <QCoreApplication>
 #include <anticarium_pi/AnticariumManager.h>
 #include <anticarium_pi/Jttp.h>
-#include <anticarium_pi/config/ApplicationSettings.h>
+#include <config/ApplicationSettings.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/spdlog.h>
 
 static void initializeLogger() {
-    QString qStringPath    = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "logs/AnticariumLog.log");
+    QString qStringPath    = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "logs/AnticariumPiLog.log");
     std::string loggerPath = qStringPath.toStdString();
 
     std::shared_ptr<spdlog::sinks::daily_file_sink_st> dailyLogger = std::make_shared<spdlog::sinks::daily_file_sink_st>(loggerPath, 0, 0, false, 10);
