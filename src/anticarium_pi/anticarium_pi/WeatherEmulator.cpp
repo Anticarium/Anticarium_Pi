@@ -2,11 +2,20 @@
 
 static WeatherEmulator* weatherEmulator = nullptr;
 
-static float temperatureFeedback() {
-    return weatherEmulator->getCurrentTemperature();
+template <>
+void PIDController<int>::registerTimeFunction(unsigned long (*)());
+
+template <>
+void PIDController<int>::setTarget(int);
+
+template <>
+void PIDController<int>::tick();
+
+static int temperatureFeedback() {
+    return weatherEmulator->getCurrentTemperatureInt();
 }
 
-static void temperatureOutput(float output) {
+static void temperatureOutput(int output) {
     if (output > 0) {
         weatherEmulator->setHeat(true);
     } else {
@@ -36,14 +45,15 @@ static unsigned long timeFunction() {
 
 WeatherEmulator::WeatherEmulator(QObject* parent) : QObject(parent) {
     weatherEmulator = this;
-    temperaturePid  = std::make_unique<PIDController<float>>(1, 1, 1, temperatureFeedback, temperatureOutput);
+    temperaturePid  = std::make_unique<PIDController<int>>(1, 1, 1, temperatureFeedback, temperatureOutput);
     temperaturePid->registerTimeFunction(timeFunction);
     moisturePid = std::make_unique<PIDController<int>>(1, 1, 1, moistureFeedback, moistureOutput);
     moisturePid->registerTimeFunction(timeFunction);
 }
 
 void WeatherEmulator::setTargetTemperature(float targetTemperature) {
-    temperaturePid->setTarget(targetTemperature);
+    int intTemperature = static_cast<int>(targetTemperature * FLOAT_MULTIPLIER);
+    temperaturePid->setTarget(intTemperature);
 }
 
 void WeatherEmulator::setTargetMoisture(int targetMoisture) {
@@ -51,7 +61,7 @@ void WeatherEmulator::setTargetMoisture(int targetMoisture) {
 }
 
 bool WeatherEmulator::calculateHeatToggle(float currentTempearture) {
-    this->currentTemperature = currentTempearture;
+    this->currentTemperature = static_cast<int>(currentTempearture * FLOAT_MULTIPLIER);
     temperaturePid->tick();
     return heat;
 }
@@ -70,7 +80,7 @@ void WeatherEmulator::setWater(bool water) {
     this->water = water;
 }
 
-float WeatherEmulator::getCurrentTemperature() {
+int WeatherEmulator::getCurrentTemperatureInt() {
     return currentTemperature;
 }
 

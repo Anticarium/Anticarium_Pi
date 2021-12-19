@@ -30,16 +30,18 @@ class WeatherEmulator : public QObject {
 
     void setHeat(bool heat);
     void setWater(bool water);
-    float getCurrentTemperature();
+    int getCurrentTemperatureInt();
     int getCurrentMoisture();
     virtual ~WeatherEmulator();
 
+    enum { FLOAT_MULTIPLIER = 100 };
+
   private:
-    float currentTemperature = 0.0f;
-    int currentMoisture      = 0;
+    int currentTemperature = 0;
+    int currentMoisture    = 0;
 
     bool heat  = false;
     bool water = false;
-    std::unique_ptr<PIDController<float>> temperaturePid;
+    std::unique_ptr<PIDController<int>> temperaturePid;
     std::unique_ptr<PIDController<int>> moisturePid;
 };
