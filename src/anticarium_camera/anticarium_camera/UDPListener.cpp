@@ -3,7 +3,7 @@
 #include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
-const QString UDPListener::HANDSHAKE_MESSAGE = "client_ready";
+const QString UDPListener::HEARTBEAT_MESSAGE = "client_ready";
 
 UDPListener::UDPListener(Client& udpClient, QObject* parent) : QObject(parent), udpClient(udpClient) {
     auto settings = ApplicationSettings::instance();
@@ -14,32 +14,31 @@ UDPListener::UDPListener(Client& udpClient, QObject* parent) : QObject(parent), 
     quint16 udpPort = static_cast<quint16>(settings->getAnticariumUDPPort());
     udpSocket->bind(anyIp, udpPort);
 
-    connect(udpSocket, &QUdpSocket::readyRead, this, &UDPListener::checkForHandshake);
+    connect(udpSocket, &QUdpSocket::readyRead, this, &UDPListener::onHeartbeat);
 }
 
-void UDPListener::checkForHandshake() {
-    // Return if no pending datagrams
-    if (!udpSocket->hasPendingDatagrams()) {
-        SPDLOG_WARN("No handshake datagram!");
-        return;
-    }
-
-    // Check if correct handshake message
+void UDPListener::onHeartbeat() {
+    // Check if correct heartbeat message
     QNetworkDatagram datagram = udpSocket->receiveDatagram();
     QString payload           = datagram.data();
-    if (payload != HANDSHAKE_MESSAGE) {
-        SPDLOG_WARN("Invalid handshake message!");
+    if (payload != HEARTBEAT_MESSAGE) {
+        SPDLOG_WARN("Invalid heartbeat message!");
         return;
     }
 
-    // Save client data
     auto clientAddress = datagram.senderAddress();
     auto clientPort    = static_cast<quint16>(datagram.senderPort());
 
-    udpClient.setHostAddress(clientAddress);
-    udpClient.setPort(clientPort);
+    if (udpClient.getPort() != clientPort) {
+        udpClient.setPort(clientPort);
+    }
 
-    SPDLOG_INFO(QString("UDP handshake with client %1").arg(clientAddress.toString()).toStdString());
+    if (udpClient.getHostAddress() != clientAddress) {
+        udpClient.setHostAddress(clientAddress);
+        SPDLOG_INFO(QString("UDP connection established with client %1").arg(clientAddress.toString()).toStdString());
+    }
+
+    emit heartbeatEvent();
 }
 
 UDPListener::~UDPListener() {

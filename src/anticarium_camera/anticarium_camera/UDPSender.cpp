@@ -1,3 +1,4 @@
+#include <QCoreApplication>
 #include <QNetworkDatagram>
 #include <anticarium_camera/UDPSender.h>
 #include <spdlog/spdlog.h>
@@ -22,9 +23,10 @@ void UDPSender::onSendImage(const PiImage& piImage) {
         udpSocket->writeDatagram(row, udpClient.getHostAddress(), udpClient.getPort());
     }
 
+    QCoreApplication::processEvents();
+
     SPDLOG_INFO("Image sent using UDP");
 }
-
 
 UDPSender::~UDPSender() {
 }

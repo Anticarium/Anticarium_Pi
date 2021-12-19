@@ -18,8 +18,6 @@ class Camera : public QObject {
   public slots:
     void start();
 
-    void startCapture();
-
   private:
     raspicam::RaspiCam raspicam;
 

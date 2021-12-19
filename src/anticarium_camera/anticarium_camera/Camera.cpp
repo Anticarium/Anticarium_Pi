@@ -1,3 +1,4 @@
+#include <QThread>
 #include <QTimer>
 #include <anticarium_camera/Camera.h>
 #include <anticarium_camera/ImageProcess.h>
@@ -28,7 +29,8 @@ void Camera::start() {
     if (raspicam.open()) {
         SPDLOG_INFO("Camera opened");
         // Wait for camera to warm up
-        QTimer::singleShot(3000, this, SLOT(startCapture()));
+        QThread::sleep(3);
+        raspicam.startCapture();
     } else {
         SPDLOG_CRITICAL(QString("Failed to open the camera!").toStdString());
     }
@@ -48,10 +50,6 @@ void Camera::grabbed(void*) {
 
     SPDLOG_INFO("Image ready to be sent");
     emit sendImageEvent(piImage);
-}
-
-void Camera::startCapture() {
-    raspicam.startCapture();
 }
 
 Camera::~Camera() {

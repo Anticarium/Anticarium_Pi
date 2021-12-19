@@ -1,9 +1,11 @@
 # Anticarium_Pi
 
+- ADD: UDP heartbeat to stop image sending if there is no active client
+- REMOVE: UDP handshake
 - ADD: `ImageProcess::build` tests
 - MODIFY: Changed endianness of sending image row
 - MODIFY: Updated logger formatter with constant spaces for every log part
-- MODIFY: Rotate log file when it is bigger than 5MB 
+- MODIFY: Rotate log file when it is bigger than 1MB 
 - ADD: Log level parameter in `settings.ini` 
 - MODIFY: Changed image color format to BGR
 

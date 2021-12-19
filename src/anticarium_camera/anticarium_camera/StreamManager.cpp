@@ -7,12 +7,33 @@ StreamManager::StreamManager(QObject* parent) : QObject(parent) {
     udpSenderThread = new QThread(this);
     camera          = new Camera();
     cameraThread    = new QThread(this);
+    heartbeatTimer  = new QTimer(this);
 
     udpSender->moveToThread(udpSenderThread);
     camera->moveToThread(cameraThread);
 
-    connect(camera, &Camera::sendImageEvent, udpSender, &UDPSender::onSendImage);
+    heartbeatTimer->setSingleShot(true);
+    heartbeatTimer->setInterval(Timeout::HEARTBEAT);
+
     connect(cameraThread, &QThread::started, camera, &Camera::start);
+    connect(udpListener, &UDPListener::heartbeatEvent, this, &StreamManager::onStartAcquisition);
+    connect(heartbeatTimer, &QTimer::timeout, this, &StreamManager::onStopAcquisition);
+}
+
+void StreamManager::onStartAcquisition() {
+    // Start acquisition on new user connection
+    if (!heartbeatTimer->isActive()) {
+        heartbeatTimer->start();
+        connect(camera, &Camera::sendImageEvent, udpSender, &UDPSender::onSendImage);
+    } else {
+        // Restart timer on heartbeat of same user
+        heartbeatTimer->stop();
+        heartbeatTimer->start();
+    }
+}
+
+void StreamManager::onStopAcquisition() {
+    disconnect(camera, &Camera::sendImageEvent, udpSender, &UDPSender::onSendImage);
 }
 
 void StreamManager::run() {
