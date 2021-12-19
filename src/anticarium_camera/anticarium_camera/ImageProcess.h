@@ -3,6 +3,5 @@
 
 class ImageProcess {
   public:
-    ImageProcess();
-    void writeRowId(PiImage& image);
+    static void writeRowId(PiImage& image);
 };

@@ -3,11 +3,11 @@
 #include <anticarium_camera/PiImage.hpp>
 #include <raspicam/raspicam.h>
 
-class CameraManager : public QObject {
+class Camera : public QObject {
     Q_OBJECT
   public:
-    CameraManager(QObject* parent = nullptr);
-    virtual ~CameraManager();
+    Camera(QObject* parent = nullptr);
+    virtual ~Camera();
 
     // Processes grabbed image
     void grabbed(void* = nullptr);
@@ -21,7 +21,7 @@ class CameraManager : public QObject {
     void startCapture();
 
   private:
-    raspicam::RaspiCam camera;
+    raspicam::RaspiCam raspicam;
 
     // Stored image
     std::shared_ptr<unsigned char[]> image;
