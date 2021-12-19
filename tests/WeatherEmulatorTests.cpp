@@ -11,3 +11,14 @@ TEST(TestWeatherEmulator, TestPIDs) {
 
     weatherEmulator->deleteLater();
 }
+
+TEST(TestWeatherEmulator, TestPIDGetters) {
+    WeatherEmulator* weatherEmulator = new WeatherEmulator();
+    weatherEmulator->calculateHeatToggle(20.3f);
+    weatherEmulator->calculateMoistureToggle(10);
+
+    EXPECT_EQ(weatherEmulator->getCurrentMoisture(), 10);
+    EXPECT_EQ(weatherEmulator->getCurrentTemperatureInt(), static_cast<int>(20.3f * 100));
+
+    weatherEmulator->deleteLater();
+}
