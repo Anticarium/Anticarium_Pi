@@ -13,6 +13,7 @@ set(SOURCE_FILES
     anticarium_pi_tests/TestsUtility.cpp
     WeatherEmulatorTests.cpp
     config/ApplicationSettingsTests.cpp
+    ImageProcessTests.cpp
 )
 
 add_executable(${TARGET_NAME}

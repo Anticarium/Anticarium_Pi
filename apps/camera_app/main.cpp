@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include <anticarium_camera/AnticariumStream.h>
+#include <anticarium_camera/StreamManager.h>
 #include <config/ApplicationSettings.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
 
     SPDLOG_INFO("Program started");
 
-    AnticariumStream anticariumStream;
-    anticariumStream.run();
+    StreamManager streamManager;
+    streamManager.run();
 
     int exit = a.exec();
 

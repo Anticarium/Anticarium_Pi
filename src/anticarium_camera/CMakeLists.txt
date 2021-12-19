@@ -1,18 +1,18 @@
 set(HEADER_FILES
-    anticarium_camera/AnticariumStream.h
+    anticarium_camera/StreamManager.h
     anticarium_camera/UDPSender.h
     anticarium_camera/UDPListener.h
-    anticarium_camera/CameraManager.h
+    anticarium_camera/Camera.h
     anticarium_camera/ImageProcess.h
     anticarium_camera/PiImage.hpp
     anticarium_camera/Client.hpp
 )
 
 set(SOURCE_FILES
-    anticarium_camera/AnticariumStream.cpp
+    anticarium_camera/StreamManager.cpp
     anticarium_camera/UDPSender.cpp
     anticarium_camera/UDPListener.cpp
-    anticarium_camera/CameraManager.cpp
+    anticarium_camera/Camera.cpp
     anticarium_camera/ImageProcess.cpp
 )
 

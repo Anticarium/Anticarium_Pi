@@ -1,31 +1,31 @@
 #include <QTimer>
-#include <anticarium_camera/CameraManager.h>
+#include <anticarium_camera/Camera.h>
 #include <anticarium_camera/ImageProcess.h>
 #include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
-static CameraManager* cameraManager = nullptr;
+static Camera* cameraManager = nullptr;
 
 static void imageGrabbed(void*) {
     cameraManager->grabbed();
 }
 
-CameraManager::CameraManager(QObject* parent) : QObject(parent) {
+Camera::Camera(QObject* parent) : QObject(parent) {
     cameraManager = this;
 
     auto settings  = ApplicationSettings::instance();
-    auto imageSize = camera.getImageTypeSize(raspicam::RASPICAM_FORMAT_RGB);
+    auto imageSize = raspicam.getImageTypeSize(raspicam::RASPICAM_FORMAT_RGB);
 
     // Pre-allocate memory for image
     image = std::shared_ptr<unsigned char[]>(new unsigned char[imageSize]);
 
-    camera.setFormat(raspicam::RASPICAM_FORMAT_BGR);
-    camera.setUserCallback(imageGrabbed, image.get());
-    camera.setFrameRate(settings->getFps());
+    raspicam.setFormat(raspicam::RASPICAM_FORMAT_BGR);
+    raspicam.setUserCallback(imageGrabbed, image.get());
+    raspicam.setFrameRate(settings->getFps());
 }
 
-void CameraManager::start() {
-    if (camera.open()) {
+void Camera::start() {
+    if (raspicam.open()) {
         SPDLOG_INFO("Camera opened");
         // Wait for camera to warm up
         QTimer::singleShot(3000, this, SLOT(startCapture()));
@@ -34,26 +34,25 @@ void CameraManager::start() {
     }
 }
 
-void CameraManager::grabbed(void*) {
-    camera.retrieve(image.get());
+void Camera::grabbed(void*) {
+    raspicam.retrieve(image.get());
 
     // Construct PiImage for image processing and sending
     PiImage piImage;
-    int width    = static_cast<int>(camera.getWidth());
-    int height   = static_cast<int>(camera.getHeight());
+    int width    = static_cast<int>(raspicam.getWidth());
+    int height   = static_cast<int>(raspicam.getHeight());
     piImage.size = QSize(width, height);
     piImage.data = image;
 
-    ImageProcess imageProcess;
-    imageProcess.writeRowId(piImage);
+    ImageProcess::writeRowId(piImage);
 
     SPDLOG_INFO("Image ready to be sent");
     emit sendImageEvent(piImage);
 }
 
-void CameraManager::startCapture() {
-    camera.startCapture();
+void Camera::startCapture() {
+    raspicam.startCapture();
 }
 
-CameraManager::~CameraManager() {
+Camera::~Camera() {
 }

@@ -1,9 +1,6 @@
 #include <anticarium_camera/ImageProcess.h>
 #include <string.h>
 
-ImageProcess::ImageProcess() {
-}
-
 void ImageProcess::writeRowId(PiImage& image) {
     if (image.data.expired()) {
         return;
@@ -22,7 +19,7 @@ void ImageProcess::writeRowId(PiImage& image) {
         uint16_t rowNumber = static_cast<uint16_t>(i);
         unsigned char* arr = reinterpret_cast<unsigned char*>(&rowNumber);
 
-        unsigned char result[3] = { 0, arr[1], arr[0] };
+        unsigned char result[3] = { 0, arr[0], arr[1] };
 
         // write row number in 1 and 2 indexes of row array
         memcpy(row + position, result, sizeof(result));
