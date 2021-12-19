@@ -14,7 +14,7 @@ class StreamManager : public QObject {
     virtual ~StreamManager();
 
   private slots:
-    void onHeartbeat();
+    void onStartAcquisition();
     void onStopAcquisition();
 
   private:

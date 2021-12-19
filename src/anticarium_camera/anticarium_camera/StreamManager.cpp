@@ -16,11 +16,11 @@ StreamManager::StreamManager(QObject* parent) : QObject(parent) {
     heartbeatTimer->setInterval(Timeout::HEARTBEAT);
 
     connect(cameraThread, &QThread::started, camera, &Camera::start);
-    connect(udpListener, &UDPListener::heartbeatEvent, this, &StreamManager::onHeartbeat);
+    connect(udpListener, &UDPListener::heartbeatEvent, this, &StreamManager::onStartAcquisition);
     connect(heartbeatTimer, &QTimer::timeout, this, &StreamManager::onStopAcquisition);
 }
 
-void StreamManager::onHeartbeat() {
+void StreamManager::onStartAcquisition() {
     // Start acquisition on new user connection
     if (!heartbeatTimer->isActive()) {
         heartbeatTimer->start();
