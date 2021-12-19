@@ -18,7 +18,7 @@ TEST(TestWeatherEmulator, TestPIDGetters) {
     weatherEmulator->calculateMoistureToggle(10);
 
     EXPECT_EQ(weatherEmulator->getCurrentMoisture(), 10);
-    EXPECT_EQ(weatherEmulator->getCurrentTemperatureInt(), static_cast<int>(20.3f * 100));
+    EXPECT_EQ(weatherEmulator->getCurrentTemperatureInt(), static_cast<int>(20.3f * WeatherEmulator::FLOAT_MULTIPLIER));
 
     weatherEmulator->deleteLater();
 }
