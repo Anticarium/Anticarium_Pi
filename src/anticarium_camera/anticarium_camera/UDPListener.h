@@ -8,14 +8,18 @@ class UDPListener : public QObject {
     UDPListener(Client& udpClient, QObject* parent = nullptr);
     virtual ~UDPListener();
 
+
+  signals:
+    void heartbeatEvent();
+
   private slots:
-    // Check if there is handshake attempt
-    void checkForHandshake();
+    // Client requests data
+    void onHeartbeat();
 
   private:
     QUdpSocket* udpSocket = nullptr;
 
-    static const QString HANDSHAKE_MESSAGE;
+    static const QString HEARTBEAT_MESSAGE;
 
     Client& udpClient;
 };

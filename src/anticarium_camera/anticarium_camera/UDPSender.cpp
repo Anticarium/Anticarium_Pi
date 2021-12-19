@@ -28,6 +28,5 @@ void UDPSender::onSendImage(const PiImage& piImage) {
     SPDLOG_INFO("Image sent using UDP");
 }
 
-
 UDPSender::~UDPSender() {
 }

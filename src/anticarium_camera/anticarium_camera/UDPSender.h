@@ -14,6 +14,5 @@ class UDPSender : public QObject {
 
   private:
     QUdpSocket* udpSocket = nullptr;
-
     const Client& udpClient;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <QThread>
+#include <QTimer>
 #include <anticarium_camera/Camera.h>
 #include <anticarium_camera/Client.hpp>
 #include <anticarium_camera/UDPListener.h>
@@ -12,15 +13,19 @@ class StreamManager : public QObject {
     void run();
     virtual ~StreamManager();
 
-  signals:
-    void requestNewImageEvent();
+  private slots:
+    void onHeartbeat();
+    void onStopAcquisition();
 
   private:
+    enum Timeout { HEARTBEAT = 10000 };
+
     UDPSender* udpSender     = nullptr;
     UDPListener* udpListener = nullptr;
     Camera* camera           = nullptr;
     QThread* cameraThread    = nullptr;
     QThread* udpSenderThread = nullptr;
+    QTimer* heartbeatTimer   = nullptr;
 
     Client udpClient;
 };
