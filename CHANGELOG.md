@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- MODIFY: Fixed first values of temperature PID 
 - ADD: UDP heartbeat to stop image sending if there is no active client
 - REMOVE: UDP handshake
 - ADD: `ImageProcess::build` tests
