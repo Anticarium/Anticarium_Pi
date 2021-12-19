@@ -11,6 +11,11 @@ ApplicationSettings::ApplicationSettings(const QString& directoryPath, QObject* 
     i2cFetchTimeout         = settings->value("I2C_fetch_timeout", 1000).toInt();
     anticariumUDPPort       = settings->value("Anticarium_UDP_Port", 0).toInt();
     fps                     = settings->value("FPS", 1).toInt();
+    logLevel                = static_cast<spdlog::level::level_enum>(settings->value("Log_Level", spdlog::level::level_enum::trace).toInt());
+}
+
+spdlog::level::level_enum ApplicationSettings::getLogLevel() const {
+    return logLevel;
 }
 
 int ApplicationSettings::getFps() const {

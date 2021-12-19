@@ -17,3 +17,4 @@ target_include_directories(${TARGET_NAME} PRIVATE
 )
 
 ADDQT5CORE(${TARGET_NAME})
+ADDSPDLOG(${TARGET_NAME})

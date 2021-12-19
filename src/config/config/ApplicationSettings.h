@@ -1,5 +1,6 @@
 #pragma once
 #include <QSettings>
+#include <spdlog/spdlog.h>
 
 class ApplicationSettings : public QObject {
     Q_OBJECT
@@ -17,6 +18,7 @@ class ApplicationSettings : public QObject {
     int getI2CFetchTimeout() const;
     int getAnticariumUDPPort() const;
     int getFps() const;
+    spdlog::level::level_enum getLogLevel() const;
 
   private:
     static ApplicationSettings* applicationSettings;
@@ -25,10 +27,11 @@ class ApplicationSettings : public QObject {
     QSettings* settings = nullptr;
 
     QString anticariumUrl;
-    int anticariumUDPPort       = 0;
-    int sensorDataSendTimeout   = 0;
-    int controlDataFetchTimeout = 0;
-    int pidSampleTimeout        = 0;
-    int i2cFetchTimeout         = 0;
-    int fps                     = 0;
+    int anticariumUDPPort              = 0;
+    int sensorDataSendTimeout          = 0;
+    int controlDataFetchTimeout        = 0;
+    int pidSampleTimeout               = 0;
+    int i2cFetchTimeout                = 0;
+    int fps                            = 0;
+    spdlog::level::level_enum logLevel = spdlog::level::trace;
 };
