@@ -26,12 +26,14 @@ void UDPListener::onHeartbeat() {
         return;
     }
 
-    // Save client data
     auto clientAddress = datagram.senderAddress();
     auto clientPort    = static_cast<quint16>(datagram.senderPort());
 
-    if (udpClient.getPort() != clientPort || udpClient.getHostAddress() != clientAddress) {
+    if (udpClient.getPort() != clientPort) {
         udpClient.setPort(clientPort);
+    }
+
+    if (udpClient.getHostAddress() != clientAddress) {
         udpClient.setHostAddress(clientAddress);
         SPDLOG_INFO(QString("UDP connection established with client %1").arg(clientAddress.toString()).toStdString());
     }
