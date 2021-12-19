@@ -9,10 +9,10 @@
 static void initializeLogger() {
     auto settings = ApplicationSettings::instance();
 
-    auto loggerPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "logs/AnticariumCaneraLog.log").toStdString();
+    auto loggerPath = QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "logs/AnticariumCameraLog.log").toStdString();
 
     auto dailySink    = std::make_shared<spdlog::sinks::daily_file_sink_mt>(loggerPath, 0, 0, false, 10);
-    auto rotatingSink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(dailySink->filename(), 1048576 * 5, 20);
+    auto rotatingSink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(dailySink->filename(), 1048576 * 1, 20);
     auto consoleSink  = std::make_shared<spdlog::sinks::stdout_sink_mt>();
 
     std::vector<spdlog::sink_ptr> loggerSinks;
