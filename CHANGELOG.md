@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: UDP heartbeat to stop image sending if there is no active client
+- REMOVE: UDP handshake
 - ADD: `ImageProcess::build` tests
 - MODIFY: Changed endianness of sending image row
 - MODIFY: Updated logger formatter with constant spaces for every log part
