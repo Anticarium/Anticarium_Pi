@@ -19,7 +19,7 @@ CameraManager::CameraManager(QObject* parent) : QObject(parent) {
     // Pre-allocate memory for image
     image = std::shared_ptr<unsigned char[]>(new unsigned char[imageSize]);
 
-    camera.setFormat(raspicam::RASPICAM_FORMAT_RGB);
+    camera.setFormat(raspicam::RASPICAM_FORMAT_BGR);
     camera.setUserCallback(imageGrabbed, image.get());
     camera.setFrameRate(settings->getFps());
 }

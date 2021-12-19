@@ -16,4 +16,5 @@ TEST(TestApplicationSettings, TestRead) {
     EXPECT_EQ(applicationSettings->getPIDSampleTimeout(), 30);
     EXPECT_EQ(applicationSettings->getI2CFetchTimeout(), 40);
     EXPECT_EQ(applicationSettings->getFps(), 10);
+    EXPECT_EQ(applicationSettings->getLogLevel(), 2);
 }

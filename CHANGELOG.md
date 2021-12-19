@@ -1,5 +1,10 @@
 # Anticarium_Pi
 
+- MODIFY: Updated logger formatter with constant spaces for every log part
+- MODIFY: Rotate log file when it is bigger than 5MB 
+- ADD: Log level parameter in `settings.ini` 
+- MODIFY: Changed image color format to BGR
+
 # 1.2.0
 - ADD: UDP sender class `UDPSender`, that sends video to UDP
 - ADD: UDP receiver class `UDPListener`, that decides which client to send data to

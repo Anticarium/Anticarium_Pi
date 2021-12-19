@@ -6,3 +6,4 @@ Control_Data_fetch_timeout=1000
 PID_sample_timeout=3000
 I2C_fetch_timeout=500
 FPS=20
+Log_Level=2
