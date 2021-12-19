@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: `ImageProcess::build` tests
+- MODIFY: Changed endianness of sending image row
 - MODIFY: Updated logger formatter with constant spaces for every log part
 - MODIFY: Rotate log file when it is bigger than 5MB 
 - ADD: Log level parameter in `settings.ini` 
