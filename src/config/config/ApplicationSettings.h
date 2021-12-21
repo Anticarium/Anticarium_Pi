@@ -18,6 +18,7 @@ class ApplicationSettings : public QObject {
     int getI2CFetchTimeout() const;
     int getAnticariumUDPPort() const;
     int getFps() const;
+    int getUDPThreadsAmount() const;
     spdlog::level::level_enum getLogLevel() const;
 
   private:
@@ -33,5 +34,6 @@ class ApplicationSettings : public QObject {
     int pidSampleTimeout               = 0;
     int i2cFetchTimeout                = 0;
     int fps                            = 0;
+    int udpThreadsAmount               = 0;
     spdlog::level::level_enum logLevel = spdlog::level::trace;
 };

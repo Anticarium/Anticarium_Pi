@@ -6,6 +6,7 @@ set(HEADER_FILES
     anticarium_camera/ImageProcess.h
     anticarium_camera/PiImage.hpp
     anticarium_camera/Client.hpp
+    anticarium_camera/UDPSwitch.h
 )
 
 set(SOURCE_FILES
@@ -14,6 +15,7 @@ set(SOURCE_FILES
     anticarium_camera/UDPListener.cpp
     anticarium_camera/Camera.cpp
     anticarium_camera/ImageProcess.cpp
+    anticarium_camera/UDPSwitch.cpp
 )
 
 set(TARGET_NAME anticarium_camera_lib)

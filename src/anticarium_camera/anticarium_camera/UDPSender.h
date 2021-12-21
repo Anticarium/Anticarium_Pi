@@ -10,7 +10,7 @@ class UDPSender : public QObject {
     virtual ~UDPSender();
 
   public slots:
-    void onSendImage(const PiImage& piImage);
+    void onSendImage(const RawPiImage& piImage);
 
   private:
     QUdpSocket* udpSocket = nullptr;

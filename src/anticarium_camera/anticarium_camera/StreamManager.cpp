@@ -1,15 +1,14 @@
 #include <anticarium_camera/StreamManager.h>
+#include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
 StreamManager::StreamManager(QObject* parent) : QObject(parent) {
-    udpListener     = new UDPListener(udpClient, this);
-    udpSender       = new UDPSender(udpClient);
-    udpSenderThread = new QThread(this);
-    camera          = new Camera();
-    cameraThread    = new QThread(this);
-    heartbeatTimer  = new QTimer(this);
+    udpListener    = new UDPListener(udpClientInfo, this);
+    camera         = new Camera();
+    cameraThread   = new QThread(this);
+    heartbeatTimer = new QTimer(this);
+    udpSwitch      = new UDPSwitch(udpClientInfo, this);
 
-    udpSender->moveToThread(udpSenderThread);
     camera->moveToThread(cameraThread);
 
     heartbeatTimer->setSingleShot(true);
@@ -24,7 +23,7 @@ void StreamManager::onStartAcquisition() {
     // Start acquisition on new user connection
     if (!heartbeatTimer->isActive()) {
         heartbeatTimer->start();
-        connect(camera, &Camera::sendImageEvent, udpSender, &UDPSender::onSendImage);
+        connect(camera, &Camera::sendImageEvent, udpSwitch, &UDPSwitch::onSendImage);
     } else {
         // Restart timer on heartbeat of same user
         heartbeatTimer->stop();
@@ -33,18 +32,15 @@ void StreamManager::onStartAcquisition() {
 }
 
 void StreamManager::onStopAcquisition() {
-    disconnect(camera, &Camera::sendImageEvent, udpSender, &UDPSender::onSendImage);
+    disconnect(camera, &Camera::sendImageEvent, udpSwitch, &UDPSwitch::onSendImage);
 }
 
 void StreamManager::run() {
-    udpSenderThread->start();
+    udpSwitch->start();
     cameraThread->start();
 }
 
 StreamManager::~StreamManager() {
     cameraThread->quit();
     cameraThread->wait();
-
-    udpSenderThread->quit();
-    udpSenderThread->wait();
 }

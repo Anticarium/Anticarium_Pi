@@ -31,6 +31,7 @@ static void initializeLogger() {
 
 int main(int argc, char* argv[]) {
     qRegisterMetaType<PiImage>("PiImage");
+    qRegisterMetaType<RawPiImage>("RawPiImage");
 
     QCoreApplication a(argc, argv);
 

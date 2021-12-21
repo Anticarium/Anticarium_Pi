@@ -10,3 +10,8 @@ struct PiImage {
     QSize size;
     std::weak_ptr<unsigned char[]> data;
 };
+
+struct RawPiImage {
+    QSize size;
+    unsigned char* data = nullptr;
+};
