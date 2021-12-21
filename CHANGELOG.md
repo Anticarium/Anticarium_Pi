@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: `UDP_Threads_Amount` parameter in `settings.ini` to regulate thread amount for UDP sending
+- ADD: Multithreaded UDP image sending by splitting image into several parts
 - MODIFY: Fixed first values of temperature PID 
 - ADD: UDP heartbeat to stop image sending if there is no active client
 - REMOVE: UDP handshake

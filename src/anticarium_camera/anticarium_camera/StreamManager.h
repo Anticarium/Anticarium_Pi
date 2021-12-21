@@ -4,7 +4,6 @@
 #include <anticarium_camera/Camera.h>
 #include <anticarium_camera/Client.hpp>
 #include <anticarium_camera/UDPListener.h>
-#include <anticarium_camera/UDPSender.h>
 #include <anticarium_camera/UDPSwitch.h>
 
 class StreamManager : public QObject {

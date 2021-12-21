@@ -3,7 +3,7 @@
 #include <anticarium_camera/UDPSender.h>
 #include <spdlog/spdlog.h>
 
-UDPSender::UDPSender(const Client& udpClient, QObject* parent) : QObject(parent), udpClient(udpClient) {
+UDPSender::UDPSender(const Client& udpClient, QObject* parent) : QObject(parent), udpClientInfo(udpClient) {
     udpSocket = new QUdpSocket(this);
 }
 
@@ -15,7 +15,7 @@ void UDPSender::onSendImage(const RawPiImage& piImage) {
 
         auto row = QByteArray(reinterpret_cast<char*>(data), length);
 
-        udpSocket->writeDatagram(row, udpClient.getHostAddress(), udpClient.getPort());
+        udpSocket->writeDatagram(row, udpClientInfo.getHostAddress(), udpClientInfo.getPort());
     }
 
     QCoreApplication::processEvents();

@@ -6,7 +6,7 @@
 class UDPSender : public QObject {
     Q_OBJECT
   public:
-    UDPSender(const Client& udpClient, QObject* parent = nullptr);
+    UDPSender(const Client& udpClientInfo, QObject* parent = nullptr);
     virtual ~UDPSender();
 
   public slots:
@@ -14,5 +14,5 @@ class UDPSender : public QObject {
 
   private:
     QUdpSocket* udpSocket = nullptr;
-    const Client& udpClient;
+    const Client& udpClientInfo;
 };
