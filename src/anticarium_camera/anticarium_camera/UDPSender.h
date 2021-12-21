@@ -6,13 +6,13 @@
 class UDPSender : public QObject {
     Q_OBJECT
   public:
-    UDPSender(const Client& udpClient, QObject* parent = nullptr);
+    UDPSender(const Client& udpClientInfo, QObject* parent = nullptr);
     virtual ~UDPSender();
 
   public slots:
-    void onSendImage(const PiImage& piImage);
+    void onSendImage(const RawPiImage& piImage);
 
   private:
     QUdpSocket* udpSocket = nullptr;
-    const Client& udpClient;
+    const Client& udpClientInfo;
 };

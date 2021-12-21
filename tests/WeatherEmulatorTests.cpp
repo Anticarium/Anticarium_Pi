@@ -2,23 +2,21 @@
 #include <gtest/gtest.h>
 
 TEST(TestWeatherEmulator, TestPIDs) {
-    WeatherEmulator* weatherEmulator = new WeatherEmulator();
+    QObject p;
+    WeatherEmulator* weatherEmulator = new WeatherEmulator(&p);
     weatherEmulator->setTargetTemperature(23.4f);
     weatherEmulator->setTargetMoisture(76);
 
     EXPECT_FALSE(weatherEmulator->calculateMoistureToggle(98));
     EXPECT_TRUE(weatherEmulator->calculateHeatToggle(21.2f));
-
-    weatherEmulator->deleteLater();
 }
 
 TEST(TestWeatherEmulator, TestPIDGetters) {
-    WeatherEmulator* weatherEmulator = new WeatherEmulator();
+    QObject p;
+    WeatherEmulator* weatherEmulator = new WeatherEmulator(&p);
     weatherEmulator->calculateHeatToggle(20.3f);
     weatherEmulator->calculateMoistureToggle(10);
 
     EXPECT_EQ(weatherEmulator->getCurrentMoisture(), 10);
     EXPECT_EQ(weatherEmulator->getCurrentTemperatureInt(), static_cast<int>(20.3f * WeatherEmulator::FLOAT_MULTIPLIER));
-
-    weatherEmulator->deleteLater();
 }

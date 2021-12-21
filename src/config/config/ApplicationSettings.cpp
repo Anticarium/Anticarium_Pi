@@ -12,6 +12,11 @@ ApplicationSettings::ApplicationSettings(const QString& directoryPath, QObject* 
     anticariumUDPPort       = settings->value("Anticarium_UDP_Port", 0).toInt();
     fps                     = settings->value("FPS", 1).toInt();
     logLevel                = static_cast<spdlog::level::level_enum>(settings->value("Log_Level", spdlog::level::level_enum::trace).toInt());
+    udpThreadsAmount        = settings->value("UDP_Threads_Amount", 0).toInt();
+}
+
+int ApplicationSettings::getUDPThreadsAmount() const {
+    return udpThreadsAmount;
 }
 
 spdlog::level::level_enum ApplicationSettings::getLogLevel() const {

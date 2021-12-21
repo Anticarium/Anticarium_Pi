@@ -4,7 +4,7 @@
 #include <anticarium_camera/Camera.h>
 #include <anticarium_camera/Client.hpp>
 #include <anticarium_camera/UDPListener.h>
-#include <anticarium_camera/UDPSender.h>
+#include <anticarium_camera/UDPSwitch.h>
 
 class StreamManager : public QObject {
     Q_OBJECT
@@ -20,12 +20,11 @@ class StreamManager : public QObject {
   private:
     enum Timeout { HEARTBEAT = 10000 };
 
-    UDPSender* udpSender     = nullptr;
+    UDPSwitch* udpSwitch     = nullptr;
     UDPListener* udpListener = nullptr;
     Camera* camera           = nullptr;
     QThread* cameraThread    = nullptr;
-    QThread* udpSenderThread = nullptr;
     QTimer* heartbeatTimer   = nullptr;
 
-    Client udpClient;
+    Client udpClientInfo;
 };

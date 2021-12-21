@@ -5,7 +5,7 @@
 
 const QString UDPListener::HEARTBEAT_MESSAGE = "client_ready";
 
-UDPListener::UDPListener(Client& udpClient, QObject* parent) : QObject(parent), udpClient(udpClient) {
+UDPListener::UDPListener(Client& udpClientInfo, QObject* parent) : QObject(parent), udpClientInfo(udpClientInfo) {
     auto settings = ApplicationSettings::instance();
 
     udpSocket = new QUdpSocket(this);
@@ -29,12 +29,12 @@ void UDPListener::onHeartbeat() {
     auto clientAddress = datagram.senderAddress();
     auto clientPort    = static_cast<quint16>(datagram.senderPort());
 
-    if (udpClient.getPort() != clientPort) {
-        udpClient.setPort(clientPort);
+    if (udpClientInfo.getPort() != clientPort) {
+        udpClientInfo.setPort(clientPort);
     }
 
-    if (udpClient.getHostAddress() != clientAddress) {
-        udpClient.setHostAddress(clientAddress);
+    if (udpClientInfo.getHostAddress() != clientAddress) {
+        udpClientInfo.setHostAddress(clientAddress);
         SPDLOG_INFO(QString("UDP connection established with client %1").arg(clientAddress.toString()).toStdString());
     }
 

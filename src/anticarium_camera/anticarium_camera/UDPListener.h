@@ -5,7 +5,7 @@
 class UDPListener : public QObject {
     Q_OBJECT
   public:
-    UDPListener(Client& udpClient, QObject* parent = nullptr);
+    UDPListener(Client& udpClientInfo, QObject* parent = nullptr);
     virtual ~UDPListener();
 
 
@@ -21,5 +21,5 @@ class UDPListener : public QObject {
 
     static const QString HEARTBEAT_MESSAGE;
 
-    Client& udpClient;
+    Client& udpClientInfo;
 };
