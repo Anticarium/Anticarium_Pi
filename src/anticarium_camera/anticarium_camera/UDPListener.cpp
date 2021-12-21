@@ -5,7 +5,7 @@
 
 const QString UDPListener::HEARTBEAT_MESSAGE = "client_ready";
 
-UDPListener::UDPListener(Client& udpClient, QObject* parent) : QObject(parent), udpClientInfo(udpClient) {
+UDPListener::UDPListener(Client& udpClientInfo, QObject* parent) : QObject(parent), udpClientInfo(udpClientInfo) {
     auto settings = ApplicationSettings::instance();
 
     udpSocket = new QUdpSocket(this);

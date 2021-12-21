@@ -3,7 +3,7 @@
 #include <anticarium_camera/UDPSender.h>
 #include <spdlog/spdlog.h>
 
-UDPSender::UDPSender(const Client& udpClient, QObject* parent) : QObject(parent), udpClientInfo(udpClient) {
+UDPSender::UDPSender(const Client& udpClientInfo, QObject* parent) : QObject(parent), udpClientInfo(udpClientInfo) {
     udpSocket = new QUdpSocket(this);
 }
 
