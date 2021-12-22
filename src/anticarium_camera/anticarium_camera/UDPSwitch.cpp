@@ -64,7 +64,7 @@ void UDPSwitch::onSendImage(const PiImage& piImage) {
             if (remainderHeight == 0) {
                 imagePart.size.setHeight(heightPart);
             } else {
-                imagePart.size.setHeight(remainderHeight);
+                imagePart.size.setHeight(heightPart - remainderHeight);
             }
         }
 
