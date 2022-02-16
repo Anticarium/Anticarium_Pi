@@ -36,6 +36,12 @@ class WeatherManager : public QObject {
      */
     void sample();
 
+    /*
+     * Changes input value according to different requirements of output components
+     * and sends it to i2c
+     */
+    void send(I2COutput::OutputType outputType, int value);
+
     I2CInput* i2cInput   = nullptr;
     I2COutput* i2cOutput = nullptr;
 };

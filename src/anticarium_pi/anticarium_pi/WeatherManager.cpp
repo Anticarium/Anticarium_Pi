@@ -1,4 +1,5 @@
 #include <anticarium_pi/WeatherManager.h>
+#include <anticarium_pi/helper/AnticariumFunctions.hpp>
 #include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
@@ -20,7 +21,7 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     connect(i2cFetchTimer, &QTimer::timeout, i2cInput, &I2CInput::fetchData);
     connect(sampleTimer, &QTimer::timeout, this, &WeatherManager::sample);
 
-    ApplicationSettings* settings = ApplicationSettings::instance();
+    auto settings = ApplicationSettings::instance();
     i2cFetchTimer->setInterval(settings->getI2CFetchTimeout());
     sampleTimer->setInterval(settings->getPIDSampleTimeout());
 }
@@ -58,9 +59,9 @@ void WeatherManager::setControl(const shared_types::Control& control) {
 
     i2cOutput->send(I2COutput::LED, static_cast<unsigned char>(control.getLightPercentage()));
 
-    auto windPercentage = static_cast<unsigned char>(control.getWindPercentage());
-    i2cOutput->send(I2COutput::FAN_IO, windPercentage);
-    i2cOutput->send(I2COutput::FAN_PWM, windPercentage);
+    int windPercentage = control.getWindPercentage();
+    send(I2COutput::FAN_PWM, windPercentage);
+    send(I2COutput::FAN_IO, windPercentage);
 }
 
 void WeatherManager::sample() {
@@ -72,8 +73,31 @@ void WeatherManager::sample() {
     SPDLOG_INFO(QString("Current temperature: %1").arg(sensorData.getTemperature()).toStdString());
     SPDLOG_INFO(QString("Current moisture: %1").arg(sensorData.getMoisture()).toStdString());
 
-    i2cOutput->send(I2COutput::OutputType::HEAT, heat);
-    i2cOutput->send(I2COutput::OutputType::WATER, water);
+    send(I2COutput::HEAT, heat);
+    send(I2COutput::WATER, water);
+}
+
+void WeatherManager::send(I2COutput::OutputType outputType, int value) {
+    switch (outputType) {
+        case I2COutput::FAN_PWM: {
+            // For fan to stop rotating we need to send pwm of 0, which will be
+            // inverted on IC side to max pwm and for some reason stop the fan with disabled
+            // power
+            if (value) {
+                value = map<int>(value, 0, 100, 255, 0);
+            }
+        } break;
+        case I2COutput::LED: {
+            value = map<int>(value, 0, 100, 0, 255);
+        } break;
+        case I2COutput::HEAT: {
+            value = !value;
+        } break;
+        default: {
+        } break;
+    }
+
+    i2cOutput->send(outputType, static_cast<unsigned char>(value));
 }
 
 WeatherManager::~WeatherManager() {

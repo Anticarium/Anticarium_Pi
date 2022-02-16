@@ -1,4 +1,3 @@
-#include <anticarium_pi/helper/AnticariumFunctions.hpp>
 #include <anticarium_pi/i2c_members/I2COutput.h>
 #include <fcntl.h>         //Needed for I2C port
 #include <linux/i2c-dev.h> //Needed for I2C port
@@ -12,10 +11,6 @@ I2COutput::I2COutput(const I2CSlaveParameters& parameters, QObject* parent) : I2
 
 bool I2COutput::send(OutputType outputType, unsigned char value) {
     auto buffer = std::make_unique<unsigned char[]>(params.bufferSize);
-
-    if (outputType == LED || outputType == FAN_PWM) {
-        value = map<unsigned char>(value, 0, 100, 0, 255);
-    }
 
     buffer[0] = outputType;
     buffer[1] = value;
