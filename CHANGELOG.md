@@ -1,5 +1,7 @@
 # Anticarium_Pi
 
+- ADD: Different output values from WeatherManager for different electronic components
+- ADD: `FAN_IO` OutputType for enabling or disabling fan entirely
 - ADD: `UDP_Threads_Amount` parameter in `settings.ini` to regulate thread amount for UDP sending
 - ADD: Multithreaded UDP image sending by splitting image into several parts
 - MODIFY: Fixed first values of temperature PID 
