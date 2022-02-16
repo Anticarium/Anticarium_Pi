@@ -5,7 +5,7 @@
 #include <unistd.h>        //Needed for I2C port
 
 
-I2CSlave::I2CSlave(const I2CSlaveParameters& parameters, QObject* parent) : QObject(parent), PARAMETERS(parameters) {
+I2CSlave::I2CSlave(const I2CSlaveParameters& parameters, QObject* parent) : QObject(parent), params(parameters) {
 }
 
 bool I2CSlave::connectI2c() {
@@ -15,7 +15,7 @@ bool I2CSlave::connectI2c() {
         return false;
     }
 
-    int connectionCode = ioctl(file, I2C_SLAVE, PARAMETERS.address);
+    int connectionCode = ioctl(file, I2C_SLAVE, params.address);
     if (connectionCode < 0) {
         return false;
     }

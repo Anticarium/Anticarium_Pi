@@ -20,7 +20,7 @@ class I2CSlave : public QObject {
 
   protected:
     int file = 0;
-    const I2CSlaveParameters PARAMETERS;
+    const I2CSlaveParameters params;
 
   private:
     const std::string FILE_NAME = "/dev/i2c-1";

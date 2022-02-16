@@ -12,7 +12,7 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
     outputParameters.bufferSize = 2;
     I2CSlaveParameters inputParameters;
     inputParameters.address    = 1;
-    inputParameters.bufferSize = 3;
+    inputParameters.bufferSize = 5;
 
     i2cOutput = new I2COutput(outputParameters, this);
     i2cInput  = new I2CInput(inputParameters, this);
@@ -56,8 +56,11 @@ void WeatherManager::setControl(const shared_types::Control& control) {
     weatherEmulator->setTargetMoisture(control.getRegimeValue().getMoisture());
     weatherEmulator->setTargetTemperature(control.getRegimeValue().getTemperature());
 
-    i2cOutput->send(I2COutput::OutputType::LED, static_cast<unsigned char>(control.getLightPercentage()));
-    i2cOutput->send(I2COutput::OutputType::FAN, static_cast<unsigned char>(control.getWindPercentage()));
+    i2cOutput->send(I2COutput::LED, static_cast<unsigned char>(control.getLightPercentage()));
+
+    auto windPercentage = static_cast<unsigned char>(control.getWindPercentage());
+    i2cOutput->send(I2COutput::FAN_IO, windPercentage);
+    i2cOutput->send(I2COutput::FAN_PWM, windPercentage);
 }
 
 void WeatherManager::sample() {
