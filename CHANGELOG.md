@@ -1,5 +1,8 @@
 # Anticarium_Pi
 
+- MODIFY: Changed minimum analog moisture value from 17 to 0
+- ADD: Incorrect temperature value handling before calculating heat PID
+- ADD: Unhandled exception handler for anticarium_pi and camera applications
 - ADD: Different output values from WeatherManager for different electronic components
 - ADD: `FAN_IO` OutputType for enabling or disabling fan entirely
 - ADD: `UDP_Threads_Amount` parameter in `settings.ini` to regulate thread amount for UDP sending

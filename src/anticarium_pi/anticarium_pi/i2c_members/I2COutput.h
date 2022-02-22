@@ -10,5 +10,10 @@ class I2COutput : public I2CSlave {
      * Writes data according to specified protocol in Anticarium_IC README
      * Returns false if failed and true if succeeded
      */
-    bool send(OutputType outputType, unsigned char value);
+    bool send(OutputType outputType, unsigned char value) const;
+
+    /*
+     * Makes passed value appropriate for given output type
+     */
+    unsigned char processValue(OutputType outputType, unsigned char value) const;
 };

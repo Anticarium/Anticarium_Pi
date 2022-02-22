@@ -7,6 +7,19 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/spdlog.h>
 
+static void exceptionHandler() {
+    try {
+        std::rethrow_exception(std::current_exception());
+    } catch (const std::exception& e) {
+        SPDLOG_CRITICAL(e.what());
+    } catch (...) {
+        SPDLOG_CRITICAL("Unhandled exception occurred!");
+    }
+
+    // Exception can occur anywhere, so it is unsafe to try to terminate qt application
+    exit(-1);
+}
+
 static void initializeLogger() {
     auto settings = ApplicationSettings::instance();
 
@@ -31,6 +44,8 @@ static void initializeLogger() {
 }
 
 int main(int argc, char* argv[]) {
+    std::set_terminate(exceptionHandler);
+
     QCoreApplication a(argc, argv);
 
     ApplicationSettings::instance(QCoreApplication::applicationDirPath() + "/settings.ini", QCoreApplication::instance());

@@ -16,7 +16,7 @@ class WeatherManager : public QObject {
      */
     void run();
 
-    shared_types::SensorData getSensorData() const;
+    const shared_types::SensorData& getSensorData() const;
 
     /*
      * Uses control data as new targets for PIDs
@@ -26,6 +26,9 @@ class WeatherManager : public QObject {
     virtual ~WeatherManager();
 
   private:
+    const I2CSlaveParameters outputParameters = { 0, 2 };
+    const I2CSlaveParameters inputParameters  = { 1, 5 };
+
     WeatherEmulator* weatherEmulator = nullptr;
 
     QTimer* sampleTimer   = nullptr;
@@ -34,13 +37,13 @@ class WeatherManager : public QObject {
     /*
      * Sample sensor data and output according to PIDs
      */
-    void sample();
+    void sample() const;
 
     /*
      * Changes input value according to different requirements of output components
      * and sends it to i2c
      */
-    void send(I2COutput::OutputType outputType, int value);
+    void send(I2COutput::OutputType outputType, int value) const;
 
     I2CInput* i2cInput   = nullptr;
     I2COutput* i2cOutput = nullptr;
