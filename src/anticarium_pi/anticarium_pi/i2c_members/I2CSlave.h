@@ -22,6 +22,9 @@ class I2CSlave : public QObject {
     int file = 0;
     const I2CSlaveParameters params;
 
+    const unsigned char minPercentage = 0;
+    const unsigned char maxPercentage = 100;
+
   private:
-    const std::string FILE_NAME = "/dev/i2c-1";
+    const std::string fileName = "/dev/i2c-1";
 };
