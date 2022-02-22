@@ -1,4 +1,5 @@
 #include <anticarium_pi/WeatherManager.h>
+#include <cmath>
 #include <config/ApplicationSettings.h>
 #include <spdlog/spdlog.h>
 
@@ -64,7 +65,7 @@ void WeatherManager::sample() const {
 
     const float temperature = sensorData.getTemperature();
     // Sometimes invalid temperature gets read
-    if (temperature == temperature) {
+    if (!std::isnan(temperature)) {
         const bool heat = weatherEmulator->calculateHeatToggle(sensorData.getTemperature());
         SPDLOG_INFO(QString("Current temperature: %1").arg(static_cast<double>(temperature)).toStdString());
         send(I2COutput::HEAT, heat);

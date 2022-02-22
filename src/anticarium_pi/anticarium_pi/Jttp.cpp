@@ -1,6 +1,7 @@
 #include <QEventLoop>
 #include <QHttpMultiPart>
 #include <anticarium_pi/Jttp.h>
+#include <cmath>
 #include <config/ApplicationSettings.h>
 #include <shared_types/ControlSerializer.hpp>
 #include <shared_types/SensorDataSerializer.hpp>
@@ -48,6 +49,10 @@ void JTTP::onDataArrived(QNetworkReply* reply) {
 }
 
 void JTTP::onSendData(const shared_types::SensorData& sensorData) {
+    if (std::isnan(sensorData.getTemperature())) {
+        return;
+    }
+
     httpSend(REQUEST_TYPE::SEND, REQUEST_DATA::SENSOR_DATA, sensorData);
 }
 
