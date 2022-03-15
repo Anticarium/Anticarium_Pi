@@ -12,7 +12,7 @@ UDPListener::UDPListener(Client& udpClientInfo, QObject* parent) : QObject(paren
 
     QHostAddress anyIp(QHostAddress::AnyIPv4);
     quint16 udpPort = static_cast<quint16>(settings->getAnticariumUDPPort());
-    udpSocket->bind(anyIp, udpPort);
+    udpSocket->bind(anyIp, udpPort, QAbstractSocket::ShareAddress);
 
     connect(udpSocket, &QUdpSocket::readyRead, this, &UDPListener::onHeartbeat);
 }
@@ -35,7 +35,7 @@ void UDPListener::onHeartbeat() {
 
     if (udpClientInfo.getHostAddress() != clientAddress) {
         udpClientInfo.setHostAddress(clientAddress);
-        SPDLOG_INFO(QString("UDP connection established with client %1").arg(clientAddress.toString()).toStdString());
+        SPDLOG_INFO(QString("UDP connection established with client %1 port %2").arg(clientAddress.toString()).arg(clientPort).toStdString());
     }
 
     emit heartbeatEvent();

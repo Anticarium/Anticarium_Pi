@@ -5,7 +5,9 @@
 
 UDPSender::UDPSender(const Client& udpClientInfo, QObject* parent) : QObject(parent), udpClientInfo(udpClientInfo) {
     udpSocket = new QUdpSocket(this);
+    udpSocket->bind(5011, QAbstractSocket::ShareAddress);
 }
+
 
 void UDPSender::onSendImage(const RawPiImage& piImage) {
     // Send image row by row
