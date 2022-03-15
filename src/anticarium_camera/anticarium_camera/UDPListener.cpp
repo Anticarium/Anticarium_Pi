@@ -6,12 +6,14 @@
 const QString UDPListener::HEARTBEAT_MESSAGE = "client_ready";
 
 UDPListener::UDPListener(Client& udpClientInfo, QObject* parent) : QObject(parent), udpClientInfo(udpClientInfo) {
-    auto settings = ApplicationSettings::instance();
+    const auto& settings = *ApplicationSettings::instance();
 
     udpSocket = new QUdpSocket(this);
 
-    QHostAddress anyIp(QHostAddress::AnyIPv4);
-    quint16 udpPort = static_cast<quint16>(settings->getAnticariumUDPPort());
+    const QHostAddress anyIp(QHostAddress::AnyIPv4);
+    const auto udpPort = static_cast<quint16>(settings.getAnticariumUDPPort());
+
+    // We also bind to same port at UDPSender, that is why we need to use ShareAddress
     udpSocket->bind(anyIp, udpPort, QAbstractSocket::ShareAddress);
 
     connect(udpSocket, &QUdpSocket::readyRead, this, &UDPListener::onHeartbeat);
@@ -19,15 +21,15 @@ UDPListener::UDPListener(Client& udpClientInfo, QObject* parent) : QObject(paren
 
 void UDPListener::onHeartbeat() {
     // Check if correct heartbeat message
-    QNetworkDatagram datagram = udpSocket->receiveDatagram();
-    QString payload           = datagram.data();
+    const auto datagram = udpSocket->receiveDatagram();
+    const auto payload  = datagram.data();
     if (payload != HEARTBEAT_MESSAGE) {
         SPDLOG_WARN("Invalid heartbeat message!");
         return;
     }
 
-    auto clientAddress = datagram.senderAddress();
-    auto clientPort    = static_cast<quint16>(datagram.senderPort());
+    const auto clientAddress = datagram.senderAddress();
+    const auto clientPort    = static_cast<quint16>(datagram.senderPort());
 
     if (udpClientInfo.getPort() != clientPort) {
         udpClientInfo.setPort(clientPort);
@@ -39,7 +41,4 @@ void UDPListener::onHeartbeat() {
     }
 
     emit heartbeatEvent();
-}
-
-UDPListener::~UDPListener() {
 }

@@ -6,8 +6,6 @@ class UDPListener : public QObject {
     Q_OBJECT
   public:
     UDPListener(Client& udpClientInfo, QObject* parent = nullptr);
-    virtual ~UDPListener();
-
 
   signals:
     void heartbeatEvent();
