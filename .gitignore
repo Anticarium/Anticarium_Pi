@@ -79,3 +79,6 @@ cmake/HunterGate.cmake
 
 # Clang format
 .clang-format
+
+# Build directory
+build/
