@@ -42,7 +42,7 @@ def executeProcess(command, stdout = None):
     process = Popen(command, stdout = stdout, shell = True)
     process.communicate()
 
-def upload(force, verbose):
+def upload(force, verbose = False):
     # Path to current directory
     rootDir = os.path.dirname(os.path.realpath(__file__))
 
@@ -64,7 +64,7 @@ def upload(force, verbose):
     if verbose:
         pipe = None
 
-    executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}", pipe = pipe)
+    executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}", stdout = pipe)
 
 # Prepends ssh command related stuff tu passed command
 def sshCommand(command = ""):
