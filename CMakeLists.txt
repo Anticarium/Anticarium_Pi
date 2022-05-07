@@ -5,6 +5,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(TARGET_NAME anticarium_pi)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+list(APPEND CMAKE_PREFIX_PATH /usr/local/lib/cmake/)
 
 include(ExternLibs)
 include(HunterGate)
@@ -29,11 +30,8 @@ add_subdirectory(apps/camera_app)
 add_subdirectory(src/config)
 add_subdirectory(src/anticarium_pi)
 add_subdirectory(src/anticarium_camera)
-add_subdirectory(libs/raspicam)
 add_subdirectory(libs/pid)
 
 if(ADD_${TARGET_NAME}_TESTS)
     add_subdirectory(tests)
 endif()
-
-

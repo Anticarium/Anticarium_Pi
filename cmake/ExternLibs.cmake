@@ -18,6 +18,11 @@ function(ADDJSON TARGET_NAME)
         target_link_libraries(${TARGET_NAME} PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
 endfunction()
 
+function(ADDRASPICAM TARGET_NAME)
+    find_package(raspicam CONFIG REQUIRED)
+    target_link_libraries(${TARGET_NAME} PRIVATE raspicam)
+endfunction()
+
 function(FETCHSHAREDTYPES)
 	include(FetchContent)
 	FetchContent_Declare(
