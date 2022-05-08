@@ -44,10 +44,13 @@ const shared_types::SensorData& WeatherManager::getSensorData() const {
 }
 
 void WeatherManager::setControl(const shared_types::Control& control) {
-    SPDLOG_INFO(QString("Set target moisture: %1").arg(control.getRegimeValue().getMoisture()).toStdString());
+    const auto moisture = control.getRegimeValue().getMoisture();
+    allowWater          = moisture;
+
+    SPDLOG_INFO(QString("Set target moisture: %1").arg(moisture).toStdString());
     SPDLOG_INFO(QString("Set target temperature: %1").arg(static_cast<double>(control.getRegimeValue().getTemperature())).toStdString());
 
-    weatherEmulator->setTargetMoisture(control.getRegimeValue().getMoisture());
+    weatherEmulator->setTargetMoisture(moisture);
     weatherEmulator->setTargetTemperature(control.getRegimeValue().getTemperature());
 
     send(I2COutput::FAN_PWM, control.getWindPercentage());
@@ -59,7 +62,13 @@ void WeatherManager::setControl(const shared_types::Control& control) {
 void WeatherManager::sample() const {
     const auto& sensorData = getSensorData();
 
-    const bool water = weatherEmulator->calculateMoistureToggle(sensorData.getMoisture());
+    bool water = false;
+    if (allowWater) {
+        water = weatherEmulator->calculateMoistureToggle(sensorData.getMoisture());
+    } else {
+        water = false;
+    }
+
     SPDLOG_INFO(QString("Current moisture: %1").arg(sensorData.getMoisture()).toStdString());
     send(I2COutput::WATER, water);
 

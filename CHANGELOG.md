@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- MODIFY: Forcefully disable watering if moisture was set to 0, due to PID expecting the sensor value to rise
 - MODIFY: Horizontally mirrored video output because camera physically is rotated
 - MODIFY: Changed minimum analog moisture value from 17 to 0
 - ADD: Incorrect temperature value handling before calculating heat PID
