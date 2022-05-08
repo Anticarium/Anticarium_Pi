@@ -7,17 +7,17 @@ void ImageProcess::writeRowId(PiImage& image) {
     }
 
     // write row number in first elements of each row
-    auto height = image.size.height();
+    const int height = image.size.height();
 
-    // Multiplying by 3, because there are colors in pixel
-    auto width = image.size.width() * 3;
+    constexpr int colorsInPixel = 3;
+    const int width = image.size.width() * colorsInPixel;
 
     auto row = image.data.lock().get();
-    for (int i = 0; i < height; i++) {
+    for (int i = 0, rowNumber = height - 1; i < height; i++, rowNumber--) {
         const auto position = width * i;
 
-        uint16_t rowNumber = static_cast<uint16_t>(i);
-        unsigned char* arr = reinterpret_cast<unsigned char*>(&rowNumber);
+        uint16_t rowNumberBuffer = static_cast<uint16_t>(rowNumber);
+        unsigned char* arr = reinterpret_cast<unsigned char*>(&rowNumberBuffer);
 
         unsigned char result[3] = { 0, arr[0], arr[1] };
 
