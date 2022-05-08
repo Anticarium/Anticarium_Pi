@@ -47,4 +47,7 @@ class WeatherManager : public QObject {
 
     I2CInput* i2cInput   = nullptr;
     I2COutput* i2cOutput = nullptr;
+
+    // Flag to disable watering if moisture value was set to 0
+    bool allowWater = false;
 };
