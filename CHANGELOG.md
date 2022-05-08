@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- MODIFY: Horizontally mirrored video output because camera physically is rotated
 - MODIFY: Changed minimum analog moisture value from 17 to 0
 - ADD: Incorrect temperature value handling before calculating heat PID
 - ADD: Unhandled exception handler for anticarium_pi and camera applications
