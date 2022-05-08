@@ -59,15 +59,16 @@ void WeatherManager::setControl(const shared_types::Control& control) {
     send(I2COutput::LED, control.getLightPercentage());
 }
 
-#include <QDebug>
 void WeatherManager::sample() const {
     const auto& sensorData = getSensorData();
 
-    const bool calculated = weatherEmulator->calculateMoistureToggle(sensorData.getMoisture());
-    qDebug() << "Allow water:" << calculated;
-    qDebug() << "Moisture:" << sensorData.getMoisture() << "\n";
+    bool water = false;
+    if (allowWater) {
+        water = weatherEmulator->calculateMoistureToggle(sensorData.getMoisture());
+    } else {
+        water = false;
+    }
 
-    const bool water = allowWater ? calculated : false;
     SPDLOG_INFO(QString("Current moisture: %1").arg(sensorData.getMoisture()).toStdString());
     send(I2COutput::WATER, water);
 
