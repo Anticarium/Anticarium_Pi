@@ -21,8 +21,6 @@ fi
 
 echo -e "Performing Anticarium setup for Raspberry Pi...\n"
 cd ${HOME}
-echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> .profile
-source .profile
 
 #-----------------------------------------------------------------
 echo "Updating apt..."
@@ -69,6 +67,9 @@ echo -e "git successfully installed\n\n"
 #-----------------------------------------------------------------
 echo "Installing apache2..."
 sudo apt install -y apache2
+echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> .profile
+sudo echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> /etc/apache2/envvars
+source .profile
 echo -e "apache2 successfully installed\n\n"
 
 #-----------------------------------------------------------------
@@ -94,8 +95,13 @@ echo -e "flask successfully installed\n\n"
 #-----------------------------------------------------------------
 echo "Cloning Anticarium_Web..."
 git clone https://github.com/Anticarium/Anticarium_Web.git
+cd Anticarium_Web
+git reset --hard origin/use_environment_variables
+git checkout use_environment_variables
 echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> .profile
+sudo echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> /etc/apache2/envvars
 source .profile
+cd ${HOME}
 echo -e "Anticarium_Web successfully cloned\n\n"
 
 #-----------------------------------------------------------------
