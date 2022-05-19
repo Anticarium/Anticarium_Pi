@@ -6,8 +6,12 @@ from git import Repo
 from argparse import ArgumentParser
 
 RPI_UNAME = "pi"
-RPI_IP = "192.168.1.103"
-REMOTE_PATH = "/home/pi/Desktop/Anticarium_Pi/Anticarium_Pi"
+
+RPI_IP = os.environ["RPI_IP"]
+if not RPI_IP:
+    raise RuntimeError("RPI_IP environment variable is not set! Raspberry Pi ip address is unknown!")
+
+REMOTE_PATH = "/home/pi/Anticarium_Pi"
 
 APPS = {
     "pi":"anticarium_pi_server_app",
@@ -64,6 +68,7 @@ def upload(force, verbose = False):
     if verbose:
         pipe = None
 
+    sshCommand(f'mkdir {REMOTE_PATH}')
     executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}", stdout = pipe)
 
 # Prepends ssh command related stuff tu passed command
