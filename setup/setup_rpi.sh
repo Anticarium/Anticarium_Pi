@@ -36,7 +36,7 @@ echo -e "ssh will be available after next boot\n\n"
 #-----------------------------------------------------------------
 echo "Installing cmake..."
 cmake --version &> /dev/null
-if [ $? -ne 0 ]
+if [ $? == 0 ]
 then
     echo -e "cmake is already installed\n\n"
 else
@@ -73,8 +73,9 @@ echo -e "git successfully installed\n\n"
 #-----------------------------------------------------------------
 echo "Installing apache2..."
 sudo apt install -y apache2
-echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> .profile
-sudo sh -c 'echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> /etc/apache2/envvars'
+EXPORT_COMMAND="export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP"
+echo $EXPORT_COMMAND >> .profile
+sudo sh -c "echo $EXPORT_COMMAND >> /etc/apache2/envvars"
 echo -e "apache2 successfully installed\n\n"
 
 #-----------------------------------------------------------------
@@ -103,8 +104,9 @@ git clone https://github.com/Anticarium/Anticarium_Web.git
 cd Anticarium_Web
 git reset --hard origin/use_environment_variables
 git checkout use_environment_variables
-echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> .profile
-sudo sh -c 'echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> /etc/apache2/envvars'
+EXPORT_COMMAND="export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web"
+echo $EXPORT_COMMAND >> .profile
+sudo sh -c "echo $EXPORT_COMMAND >> /etc/apache2/envvars"
 cd ${HOME}
 echo -e "Anticarium_Web successfully cloned\n\n"
 
