@@ -35,8 +35,11 @@ echo -e "ssh will be available after next boot\n\n"
 
 #-----------------------------------------------------------------
 echo "Installing cmake..."
-if [ ! cmake --version ]
+cmake --version &> /dev/null
+if [ $? -ne 0 ]
 then
+    echo -e "cmake is already installed\n\n"
+else
     sudo apt install -y libssl-dev
     mkdir ${HOME}/cmake
     cd ${HOME}/cmake
@@ -54,9 +57,7 @@ then
     make
     sudo make install
     cd ${HOME}
-    echo -e "cmake successfully installed\n\n"
-else
-    echo -e "cmake is already installed"
+    echo -e "cmake successfully installed\n\n"    
 fi
 
 #-----------------------------------------------------------------
