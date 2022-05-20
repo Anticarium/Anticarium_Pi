@@ -35,24 +35,29 @@ echo -e "ssh will be available after next boot\n\n"
 
 #-----------------------------------------------------------------
 echo "Installing cmake..."
-sudo apt install -y libssl-dev
-mkdir ${HOME}/cmake
-cd ${HOME}/cmake
-wget https://github.com/Kitware/CMake/releases/download/v3.22.4/cmake-3.22.4.tar.gz
-tar -xf cmake-3.22.4.tar.gz
-mv cmake-3.22.4/* .
+if [ ! cmake --version ]
+then
+    sudo apt install -y libssl-dev
+    mkdir ${HOME}/cmake
+    cd ${HOME}/cmake
+    wget https://github.com/Kitware/CMake/releases/download/v3.22.4/cmake-3.22.4.tar.gz
+    tar -xf cmake-3.22.4.tar.gz
+    mv cmake-3.22.4/* .
 
-# The pattern .[!.]* is used to also match hidden files that start with dot
-mv cmake-3.22.4/.[!.]* .
+    # The pattern .[!.]* is used to also match hidden files that start with dot
+    mv cmake-3.22.4/.[!.]* .
 
-rm -rf cmake-3.22.4
-rm cmake-3.22.4.tar.gz
-chmod +x bootstrap
-./bootstrap
-make
-sudo make install
-cd ${HOME}
-echo -e "cmake successfully installed\n\n"
+    rm -rf cmake-3.22.4
+    rm cmake-3.22.4.tar.gz
+    chmod +x bootstrap
+    ./bootstrap
+    make
+    sudo make install
+    cd ${HOME}
+    echo -e "cmake successfully installed\n\n"
+else
+    echo -e "cmake is already installed"
+fi
 
 #-----------------------------------------------------------------
 echo "Installing Qt5..."
@@ -68,8 +73,7 @@ echo -e "git successfully installed\n\n"
 echo "Installing apache2..."
 sudo apt install -y apache2
 echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> .profile
-sudo echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> /etc/apache2/envvars
-source .profile
+sudo sh -c 'echo "export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP" >> /etc/apache2/envvars'
 echo -e "apache2 successfully installed\n\n"
 
 #-----------------------------------------------------------------
@@ -78,9 +82,9 @@ sudo apt-get install -y libapache2-mod-wsgi-py3
 echo -e "libapache2-mod-wsgi-py3 successfully installed\n\n"
 
 #-----------------------------------------------------------------
-echo "Installing python-dev..."
-sudo apt-get install -y python-dev
-echo -e "python-dev successfully installed\n\n"
+echo "Installing python3-dev..."
+sudo apt-get install -y python3-dev
+echo -e "python3-dev successfully installed\n\n"
 
 #-----------------------------------------------------------------
 echo "Installing python3-pip..."
@@ -99,8 +103,7 @@ cd Anticarium_Web
 git reset --hard origin/use_environment_variables
 git checkout use_environment_variables
 echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> .profile
-sudo echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> /etc/apache2/envvars
-source .profile
+sudo sh -c 'echo "export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web" >> /etc/apache2/envvars'
 cd ${HOME}
 echo -e "Anticarium_Web successfully cloned\n\n"
 
@@ -110,7 +113,8 @@ cd ${HOME}/Anticarium_Web
 mv anticarium_web.example anticarium_web.conf
 sudo mv ./anticarium_web.conf /etc/apache2/sites-available
 sudo mv ./apache2.conf.example /etc/apache2/apache2.conf
-sudo a2ensite /etc/apache2/sites-available/anticarium_web.conf
+cd /etc/apache2/sites-available
+sudo a2ensite anticarium_web.conf
 sudo service apache2 reload
 cd ${HOME}
 echo -e "Configured apache2\n\n"
@@ -124,6 +128,7 @@ cd build
 cmake ..
 make
 sudo make install
+sudo ldconfig
 cd ${HOME}
 rm -rf raspicam
 echo -e "raspicam sucessfully installed\n\n"
