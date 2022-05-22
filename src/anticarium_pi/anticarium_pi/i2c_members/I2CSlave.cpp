@@ -8,18 +8,16 @@
 I2CSlave::I2CSlave(const I2CSlaveParameters& parameters, QObject* parent) : QObject(parent), params(parameters) {
 }
 
-bool I2CSlave::connectI2c() {
+int I2CSlave::connectI2c() {
     // Open I2c bus
     file = open(fileName.data(), O_RDWR);
-    if (file < 0) {
-        return false;
-    }
 
     const int connectionCode = ioctl(file, I2C_SLAVE, params.address);
-    if (connectionCode < 0) {
-        return false;
+    if (connectionCode == -1) {
+        return errno;
     }
-    return true;
+
+    return 0;
 }
 
 I2CSlave::~I2CSlave() {

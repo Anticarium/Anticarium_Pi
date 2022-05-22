@@ -5,6 +5,7 @@
 #include <memory>
 #include <sys/ioctl.h> //Needed for I2C port
 #include <unistd.h>    //Needed for I2C port
+#include <spdlog/spdlog.h>
 
 I2CInput::I2CInput(const I2CSlaveParameters& params, QObject* parent) : I2CSlave(params, parent) {
 }
@@ -41,5 +42,7 @@ void I2CInput::fetchData() {
             default: {
             } break;
         }
+    } else {
+        SPDLOG_ERROR("Failed to read i2c data");
     }
 }
