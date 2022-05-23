@@ -37,6 +37,11 @@ then
     echo -e "apt successfully updated\n\n"
 
     #-----------------------------------------------------------------
+    echo "Installing C++ build tools..."
+    sudo apt install -y gcc g++ make
+    echo -e "C++ build tools sucessfully installed\n\n"
+
+    #-----------------------------------------------------------------
     echo "Installing Qt5..."
     sudo apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
     echo -e "Qt5 successfully installed\n\n"
