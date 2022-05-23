@@ -115,6 +115,7 @@ then
     cmake ..
     make
     sudo make install
+    sudo ldconfig
     cd $HOME
     rm -rf raspicam
     echo -e "raspicam sucessfully installed\n\n"
