@@ -92,6 +92,8 @@ then
     git clone https://github.com/Anticarium/Anticarium_Pi.git
     cd Anticarium_Pi
     wget "https://raw.githubusercontent.com/cpp-pm/gate/master/cmake/HunterGate.cmake" -O cmake/HunterGate.cmake
+    wget "https://raw.githubusercontent.com/Anticarium/Anticarium_Doc/main/.clang-format-9"
+    mv .clang-format-9 .clang-format
     cd $HOME
     echo -e "Anticarium_Pi successfully set up\n\n"
 
@@ -119,8 +121,13 @@ then
 
     #-----------------------------------------------------------------
     echo "Installing virtualbox-guest-x11..."
-    sudo apt-get install virtualbox-guest-x11
+    sudo apt install -y virtualbox-guest-x11
     echo -e "virtualbox-guest-x11 sucessfully installed\n\n"
+
+    #-----------------------------------------------------------------
+    echo "Installing clang-format..."
+    sudo apt install -y clang-format
+    echo -e "clang-format sucessfully installed\n\n"
 
     #-----------------------------------------------------------------
     REBOOT_SECONDS=60
