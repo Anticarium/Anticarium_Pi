@@ -1,5 +1,5 @@
 #!/bin/bash
-#-----------------------------------------------------------------
+
 set -e
 
 while getopts a:h flag
@@ -20,7 +20,7 @@ then
 fi
 
 echo -e "Performing Anticarium setup for Raspberry Pi...\n"
-cd ${HOME}
+cd $HOME
 
 #-----------------------------------------------------------------
 echo "Updating apt..."
@@ -35,14 +35,17 @@ echo -e "ssh will be available after next boot\n\n"
 
 #-----------------------------------------------------------------
 echo "Installing cmake..."
+set +e
 cmake --version &> /dev/null
-if [ $? == 0 ]
+CMAKE_EXIT_CODE=$?
+set -e
+if [ CMAKE_EXIT_CODE == 0 ]
 then
     echo -e "cmake is already installed\n\n"
 else
     sudo apt install -y libssl-dev
-    mkdir ${HOME}/cmake
-    cd ${HOME}/cmake
+    mkdir $HOME/cmake
+    cd $HOME/cmake
     wget https://github.com/Kitware/CMake/releases/download/v3.22.4/cmake-3.22.4.tar.gz
     tar -xf cmake-3.22.4.tar.gz
     mv cmake-3.22.4/* .
@@ -56,7 +59,7 @@ else
     ./bootstrap
     make
     sudo make install
-    cd ${HOME}
+    cd $HOME
     echo -e "cmake successfully installed\n\n"    
 fi
 
@@ -71,56 +74,21 @@ sudo apt install -y git
 echo -e "git successfully installed\n\n"
 
 #-----------------------------------------------------------------
-echo "Installing apache2..."
-sudo apt install -y apache2
-EXPORT_COMMAND="export ANTICARIUM_SERVER_IP=$ANTICARIUM_SERVER_IP"
-echo $EXPORT_COMMAND >> .profile
-sudo sh -c "echo $EXPORT_COMMAND >> /etc/apache2/envvars"
-echo -e "apache2 successfully installed\n\n"
-
-#-----------------------------------------------------------------
-echo "Installing libapache2-mod-wsgi-py3..."
-sudo apt-get install -y libapache2-mod-wsgi-py3
-echo -e "libapache2-mod-wsgi-py3 successfully installed\n\n"
-
-#-----------------------------------------------------------------
-echo "Installing python3-dev..."
-sudo apt-get install -y python3-dev
-echo -e "python3-dev successfully installed\n\n"
-
-#-----------------------------------------------------------------
-echo "Installing python3-pip..."
-sudo apt-get install -y python3-pip
-echo -e "python3-pip successfully installed\n\n"
-
-#-----------------------------------------------------------------
-echo "Installing flask..."
-pip3 install flask
-echo -e "flask successfully installed\n\n"
-
-#-----------------------------------------------------------------
 echo "Cloning Anticarium_Web..."
 git clone https://github.com/Anticarium/Anticarium_Web.git
 cd Anticarium_Web
 git reset --hard origin/use_environment_variables
 git checkout use_environment_variables
-EXPORT_COMMAND="export ANTICARIUM_WEB_PATH=/home/pi/Anticarium_Web"
-echo $EXPORT_COMMAND >> .profile
-sudo sh -c "echo $EXPORT_COMMAND >> /etc/apache2/envvars"
-cd ${HOME}
+cd $HOME
 echo -e "Anticarium_Web successfully cloned\n\n"
 
 #-----------------------------------------------------------------
-echo "Configuring apache2..."
-cd ${HOME}/Anticarium_Web
-mv anticarium_web.example anticarium_web.conf
-sudo mv ./anticarium_web.conf /etc/apache2/sites-available
-sudo mv ./apache2.conf.example /etc/apache2/apache2.conf
-cd /etc/apache2/sites-available
-sudo a2ensite anticarium_web.conf
-sudo service apache2 reload
-cd ${HOME}
-echo -e "Configured apache2\n\n"
+echo "Configuring Anticarium_Web"
+cd Anticarium_Web
+chmod +x setup_web.sh
+./setup_web.sh
+cd $HOME
+echo -e "Anticarium_Web successfully configured\n\n"
 
 #-----------------------------------------------------------------
 echo "Installing raspicam..."
@@ -132,9 +100,13 @@ cmake ..
 make
 sudo make install
 sudo ldconfig
-cd ${HOME}
+cd $HOME
 rm -rf raspicam
 echo -e "raspicam sucessfully installed\n\n"
+
+#-----------------------------------------------------------------
+echo -e "Setting up boot configuration..."
+echo -e "Boot configuration successfully set up\n\n"
 
 #-----------------------------------------------------------------
 REBOOT_SECONDS=60

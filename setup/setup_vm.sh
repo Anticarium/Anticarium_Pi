@@ -1,5 +1,5 @@
 #!/bin/bash
-#-----------------------------------------------------------------
+
 set -e
 
 while getopts a:hk flag
@@ -9,7 +9,7 @@ do
         h) echo "Anticarium first time setup script for Ubuntu 20.04 development Virtual Machine
   Arguments:
   -a <ip address>      local ip address of Raspberry Pi
-  -k                   perform SSH keys setup"; 
+  -k                   perform SSH keys setup for Raspberry Pi"; 
 
             exit 0;;
         k) SETUP_SSH=True
@@ -21,7 +21,7 @@ then
     >&2 echo "Error: RPI_IP environment variable not set! Use -a flag to pass and set it!"
     exit -1
 fi
-
+# TODO: ADD CMAKE INSTALLATION ------------------------------------------------------------------------------------------------------------------------------------------------
 cd ${HOME}
 if [ -z "$SETUP_SSH" ]
 then
@@ -99,7 +99,7 @@ then
     sudo reboot now
 
 else
-    echo -e "Performing SSH keys setup...\n"
+    echo -e "Performing SSH keys setup. Make sure Raspberry Pi is available on LAN...\n"
     scp .ssh/id_rsa.pub pi@$RPI_IP:/home/pi/
     ssh -t pi@$RPI_IP 'mkdir --parents /home/pi/.ssh; cat /home/pi/id_rsa.pub >> .ssh/authorized_keys; rm /home/pi/id_rsa.pub'
     echo "SSH keys successfully set up"
