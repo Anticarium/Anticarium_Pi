@@ -67,11 +67,6 @@ then
     fi
 
     #-----------------------------------------------------------------
-    echo "Installing Qt creator..."
-    sudo apt install -y qtcreator
-    echo -e "Qt creator successfully installed\n\n"
-
-    #-----------------------------------------------------------------
     echo "Installing git..."
     sudo apt install -y git
     echo -e "git successfully installed\n\n"
@@ -92,8 +87,7 @@ then
     git clone https://github.com/Anticarium/Anticarium_Pi.git
     cd Anticarium_Pi
     wget "https://raw.githubusercontent.com/cpp-pm/gate/master/cmake/HunterGate.cmake" -O cmake/HunterGate.cmake
-    wget "https://raw.githubusercontent.com/Anticarium/Anticarium_Doc/main/.clang-format-9"
-    mv .clang-format-9 .clang-format
+    wget "https://raw.githubusercontent.com/Anticarium/Anticarium_Doc/main/.clang-format-9" -O .clang-format
     cd $HOME
     echo -e "Anticarium_Pi successfully set up\n\n"
 

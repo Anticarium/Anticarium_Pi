@@ -99,6 +99,7 @@ echo -e "raspicam sucessfully installed\n\n"
 echo -e "Setting up boot configuration..."
 wget https://raw.githubusercontent.com/Anticarium/Anticarium_Pi/new_remote/setup/config.txt.example
 sudo mv config.txt.example /boot/config.txt
+sudo sh -c "echo i2c-dev >> /etc/modules"
 echo -e "Boot configuration successfully set up\n\n"
 
 #-----------------------------------------------------------------
