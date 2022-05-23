@@ -47,7 +47,7 @@ then
     cmake --version &> /dev/null
     CMAKE_EXIT_CODE=$?
     set -e
-    if [ CMAKE_EXIT_CODE == 0 ]
+    if [ $CMAKE_EXIT_CODE == 0 ]
     then
         echo -e "cmake is already installed\n\n"
     else
