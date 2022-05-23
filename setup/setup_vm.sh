@@ -61,6 +61,7 @@ then
     
         rm cmake-3.22.4-linux-x86_64.sh
         rm cmake-3.22.4-linux-x86_64.tar.gz
+        sudo ln --symbolic ${HOME}/cmake/bin/cmake /usr/bin/cmake
         cd $HOME
         echo -e "cmake successfully installed\n\n"   
     fi
