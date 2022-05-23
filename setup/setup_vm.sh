@@ -42,6 +42,30 @@ then
     echo -e "Qt5 successfully installed\n\n"
 
     #-----------------------------------------------------------------
+    echo "Installing cmake..."
+    set +e
+    cmake --version &> /dev/null
+    CMAKE_EXIT_CODE=$?
+    set -e
+    if [ CMAKE_EXIT_CODE == 0 ]
+    then
+        echo -e "cmake is already installed\n\n"
+    else
+        sudo apt install -y libssl-dev
+        mkdir $HOME/cmake
+        cd $HOME/cmake
+        wget https://github.com/Kitware/CMake/releases/download/v3.22.4/cmake-3.22.4-linux-x86_64.sh
+        wget https://github.com/Kitware/CMake/releases/download/v3.22.4/cmake-3.22.4-linux-x86_64.tar.gz
+        chmod +x cmake-3.22.4-linux-x86_64.sh
+        ./cmake-3.22.4-linux-x86_64.sh --prefix=.
+    
+        rm cmake-3.22.4-linux-x86_64.sh
+        rm cmake-3.22.4-linux-x86_64.tar.gz
+        cd $HOME
+        echo -e "cmake successfully installed\n\n"   
+    fi
+
+    #-----------------------------------------------------------------
     echo "Installing Qt creator..."
     sudo apt install -y qtcreator
     echo -e "Qt creator successfully installed\n\n"
@@ -91,6 +115,11 @@ then
     cd $HOME
     rm -rf raspicam
     echo -e "raspicam sucessfully installed\n\n"
+
+    #-----------------------------------------------------------------
+    echo "Installing virtualbox-guest-x11..."
+    sudo apt-get install virtualbox-guest-x11
+    echo -e "virtualbox-guest-x11 sucessfully installed\n\n"
 
     #-----------------------------------------------------------------
     REBOOT_SECONDS=60
