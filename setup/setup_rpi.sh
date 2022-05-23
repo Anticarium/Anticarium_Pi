@@ -74,20 +74,11 @@ sudo apt install -y git
 echo -e "git successfully installed\n\n"
 
 #-----------------------------------------------------------------
-echo "Cloning Anticarium_Web..."
-git clone https://github.com/Anticarium/Anticarium_Web.git
-cd Anticarium_Web
-git reset --hard origin/use_environment_variables
-git checkout use_environment_variables
-cd $HOME
-echo -e "Anticarium_Web successfully cloned\n\n"
-
-#-----------------------------------------------------------------
 echo "Configuring Anticarium_Web"
-cd Anticarium_Web
+wget https://raw.githubusercontent.com/Anticarium/Anticarium_Web/main/setup_web.sh
 chmod +x setup_web.sh
-./setup_web.sh
-cd $HOME
+./setup_web.sh -a $ANTICARIUM_SERVER_IP
+rm setup_web.sh
 echo -e "Anticarium_Web successfully configured\n\n"
 
 #-----------------------------------------------------------------
