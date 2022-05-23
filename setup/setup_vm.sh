@@ -22,7 +22,7 @@ then
     exit -1
 fi
 # TODO: ADD CMAKE INSTALLATION ------------------------------------------------------------------------------------------------------------------------------------------------
-cd ${HOME}
+cd $HOME
 if [ -z "$SETUP_SSH" ]
 then
     echo -e "Performing Anticarium setup for Ubuntu 20.04 development Virtual Machine...\n"
@@ -88,7 +88,7 @@ then
     cmake ..
     make
     sudo make install
-    cd ${HOME}
+    cd $HOME
     rm -rf raspicam
     echo -e "raspicam sucessfully installed\n\n"
 
