@@ -21,7 +21,7 @@ then
     >&2 echo "Error: RPI_IP environment variable not set! Use -a flag to pass and set it!"
     exit -1
 fi
-# TODO: ADD CMAKE INSTALLATION ------------------------------------------------------------------------------------------------------------------------------------------------
+
 cd $HOME
 if [ -z "$SETUP_SSH" ]
 then
