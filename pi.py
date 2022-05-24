@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
 import os
-from subprocess import Popen, PIPE
-from git import Repo
+import sys
+from subprocess import Popen
 from argparse import ArgumentParser
 
 RPI_UNAME = "pi"
-RPI_IP = "192.168.1.103"
-REMOTE_PATH = "/home/pi/Desktop/Anticarium_Pi/Anticarium_Pi"
+RPI_IP = "192.168.1.102"
+REMOTE_PATH = "/home/pi/Anticarium_Pi"
 
 APPS = {
     "pi":"anticarium_pi_server_app",
@@ -16,10 +16,7 @@ APPS = {
 }
 
 def parseArguments():
-    appChoices = list(APPS.keys())
-
     parser = ArgumentParser(description = "Commands for building and installing Anticarium applications on Raspberry Pi")
-    parser.add_argument("--verbose", help = "Print more output", action = "store_true")
 
     subparsers = parser.add_subparsers(dest = "action")
 
@@ -27,44 +24,28 @@ def parseArguments():
 
     subparsers.add_parser("build", help = "Build all projects")
 
-    uploadParser = subparsers.add_parser("upload", help = "Upload passed project. Uses git status as default way on how to detect changed files")
-    uploadParser.add_argument("--force", help = "Upload all files ignoring git changes", action = "store_true")
+    subparsers.add_parser("upload", help = "Upload passed project. Uses git status as default way on how to detect changed files")
 
     runParser = subparsers.add_parser("run", help = "Run selected app")
     runParser.add_argument("--app", help = "App to run", choices = APPS)
 
     subparsers.add_parser("shell", help = "Open Raspberry Pi bash shell using ssh")
+
+    subparsers.add_parser("cmd", help = "Pass command to execute on Raspberry Pi")
     
-    return parser.parse_args()
+    return parser.parse_known_args()
 
 # Main function for executing commands from this script
-def executeProcess(command, stdout = None):
-    process = Popen(command, stdout = stdout, shell = True)
+def executeProcess(command):
+    process = Popen(command, shell = True)
     process.communicate()
 
-def upload(force, verbose = False):
+def upload():
     # Path to current directory
     rootDir = os.path.dirname(os.path.realpath(__file__))
+    files = f"{rootDir}/*"
 
-    files = None
-    if force:
-        print("Force upload")
-        files = f"{rootDir}/*"
-    else:
-        print("Git diff upload")
-
-        # Check which files changed using git diff
-        repo = Repo(rootDir)
-        filesList = [ item.a_path for item in repo.index.diff(None) ]
-        
-        files = ' '.join(filesList)
-
-    # Print file uploading process on verbose output
-    pipe = PIPE
-    if verbose:
-        pipe = None
-
-    executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}", stdout = pipe)
+    executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}")
 
 # Prepends ssh command related stuff tu passed command
 def sshCommand(command = ""):
@@ -81,8 +62,8 @@ def build():
                   cmake -DADD_anticarium_pi_TESTS=ON {REMOTE_PATH}; \
                   cmake --build . --target all'")
 
-def install(verbose):
-    upload(verbose)
+def install():
+    upload()
     build()
 
 def run(app):
@@ -100,19 +81,24 @@ def run(app):
 def shell():
     sshCommand(f"'cd {REMOTE_PATH}; bash'")
 
+def cmd(argv):
+    sshCommand(f"'{' '.join(argv)}'")
+
 def execute():
-    args = parseArguments()
+    args, _ = parseArguments()
     action = args.action
     
     if action == "install":
-        install(args.verbose)
+        install()
     elif action == "build":
         build()
     elif action == "upload":
-        upload(args.force, args.verbose)
+        upload()
     elif action == "run":
         run(args.app)
     elif action == "shell":
         shell()
+    elif action == "cmd":
+        cmd(sys.argv[2:])
 
 execute()
