@@ -40,7 +40,7 @@ def executeProcess(command):
     process = Popen(command, shell = True)
     process.communicate()
 
-def upload():    
+def upload():
     # Path to current directory
     rootDir = os.path.dirname(os.path.realpath(__file__))
     files = f"{rootDir}/*"
