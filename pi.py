@@ -6,7 +6,11 @@ from subprocess import Popen
 from argparse import ArgumentParser
 
 RPI_UNAME = "pi"
-RPI_IP = "192.168.1.102"
+
+RPI_IP = os.environ["RPI_IP"]
+if not RPI_IP:
+    raise RuntimeError("RPI_IP environment variable is not set! Raspberry Pi ip address is unknown!")
+
 REMOTE_PATH = "/home/pi/Anticarium_Pi"
 
 APPS = {
@@ -46,6 +50,7 @@ def upload():
     files = f"{rootDir}/*"
 
     executeProcess(f"scp -rp {files} {RPI_UNAME}@{RPI_IP}:{REMOTE_PATH}")
+
 
 # Prepends ssh command related stuff tu passed command
 def sshCommand(command = ""):
