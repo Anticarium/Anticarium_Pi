@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- ADD: Setup scripts for Ubuntu 20.04 development VM and Raspberry Pi for first time setup in `setup` directory
 - ADD: pi.py script for remote compiling and interfacing with Raspberry pi using ssh
 - MODIFY: Forcefully disable watering if moisture was set to 0, due to PID expecting the sensor value to rise
 - MODIFY: Horizontally mirrored video output because camera physically is rotated
