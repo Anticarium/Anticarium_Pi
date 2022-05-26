@@ -97,9 +97,13 @@ echo -e "raspicam sucessfully installed\n\n"
 
 #-----------------------------------------------------------------
 echo -e "Setting up boot configuration..."
-wget https://raw.githubusercontent.com/Anticarium/Anticarium_Pi/new_remote/setup/config.txt.example
+wget https://raw.githubusercontent.com/Anticarium/Anticarium_Pi/master/setup/config.txt.example
 sudo mv config.txt.example /boot/config.txt
 sudo sh -c "echo i2c-dev >> /etc/modules"
+wget https://raw.githubusercontent.com/Anticarium/Anticarium_Pi/master/setup/run_on_boot.sh
+chmod 755 run_on_boot.sh
+echo "export ANTICARIUM_RUN_ON_BOOT=" >> .profile
+echo "$HOME/run_on_boot.sh" >> .profile
 echo -e "Boot configuration successfully set up\n\n"
 
 #-----------------------------------------------------------------

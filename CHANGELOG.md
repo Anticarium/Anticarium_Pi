@@ -1,5 +1,8 @@
 # Anticarium_Pi
 
+- ADD: `ANTICARIUM_RUN_ON_BOOT` environment variable to `setup/setup_rpi.sh` script to put in `.profile` 
+- ADD: `setup/run_on_boot.sh` script that starts both server app and camera app depending on `ANTICARIUM_RUN_ON_BOOT` environment variable
+
 # 1.3.0
 - ADD: Setup scripts for Ubuntu 20.04 development VM and Raspberry Pi for first time setup in `setup` directory
 - ADD: pi.py script for remote compiling and interfacing with Raspberry pi using ssh
