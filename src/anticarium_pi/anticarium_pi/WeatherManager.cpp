@@ -20,19 +20,19 @@ WeatherManager::WeatherManager(QObject* parent) : QObject(parent) {
 }
 
 void WeatherManager::run() {
-    const bool outputConnected = i2cOutput->connectI2c();
-    const bool inputConnected  = i2cInput->connectI2c();
+    const int outputConnected = i2cOutput->connectI2c();
+    const int inputConnected  = i2cInput->connectI2c();
 
-    if (outputConnected) {
+    if (outputConnected == 0) {
         SPDLOG_INFO("Connected to output i2c");
     } else {
-        SPDLOG_ERROR("Could not connect to output i2c");
+        SPDLOG_ERROR(QString("Could not connect to output i2c. Error code: %1").arg(outputConnected).toStdString());
     }
 
-    if (inputConnected) {
+    if (inputConnected == 0) {
         SPDLOG_INFO("Connected to input i2c");
     } else {
-        SPDLOG_ERROR("Could not connect to input i2c");
+        SPDLOG_ERROR(QString("Could not connect to input i2c. Error code: %1").arg(inputConnected).toStdString());
     }
 
     i2cFetchTimer->start();
@@ -82,7 +82,10 @@ void WeatherManager::sample() const {
 }
 
 void WeatherManager::send(I2COutput::OutputType outputType, int value) const {
-    i2cOutput->send(outputType, static_cast<unsigned char>(value));
+    const bool success = i2cOutput->send(outputType, static_cast<unsigned char>(value));
+    if(!success){
+        SPDLOG_ERROR("Failed to send i2c data");
+    }
 }
 
 WeatherManager::~WeatherManager() {
