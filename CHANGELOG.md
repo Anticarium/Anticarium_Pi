@@ -1,5 +1,6 @@
 # Anticarium_Pi
 
+- MODIFY: Fixed failing ImageProcessTests because of mirrored image feature of v1.3.0
 - ADD: `ANTICARIUM_RUN_ON_BOOT` environment variable to `setup/setup_rpi.sh` script to put in `.profile` 
 - ADD: `setup/run_on_boot.sh` script that starts both server app and camera app depending on `ANTICARIUM_RUN_ON_BOOT` environment variable
 
