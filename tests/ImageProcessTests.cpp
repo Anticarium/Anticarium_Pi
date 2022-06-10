@@ -25,13 +25,13 @@ TEST(TestImageProcess, TestBuild) {
     ImageProcess::writeRowId(piImage);
 
     EXPECT_EQ(piImage.data.lock()[0], 0);
-    EXPECT_EQ(piImage.data.lock()[1], 0);
+    EXPECT_EQ(piImage.data.lock()[1], 1);
     EXPECT_EQ(piImage.data.lock()[2], 0);
     EXPECT_EQ(piImage.data.lock()[3], 4);
     EXPECT_EQ(piImage.data.lock()[4], 5);
     EXPECT_EQ(piImage.data.lock()[5], 6);
     EXPECT_EQ(piImage.data.lock()[6], 0);
-    EXPECT_EQ(piImage.data.lock()[7], 1);
+    EXPECT_EQ(piImage.data.lock()[7], 0);
     EXPECT_EQ(piImage.data.lock()[8], 0);
     EXPECT_EQ(piImage.data.lock()[9], 10);
     EXPECT_EQ(piImage.data.lock()[10], 11);
