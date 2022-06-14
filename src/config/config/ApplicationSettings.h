@@ -5,11 +5,11 @@
 class ApplicationSettings : public QObject {
     Q_OBJECT
   public:
-    ApplicationSettings() = delete;
-    void operator=(const ApplicationSettings&) = delete;
+    ApplicationSettings()        = delete;
+    ApplicationSettings& operator=(const ApplicationSettings&) = delete;
     static ApplicationSettings* instance(const QString& directoryPath, QObject* parent = nullptr);
     static ApplicationSettings* instance();
-    virtual ~ApplicationSettings();
+    ~ApplicationSettings();
 
     QString getAnticariumUrl() const;
     int getSensorDataSendTimeout() const;

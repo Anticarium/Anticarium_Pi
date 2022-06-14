@@ -13,6 +13,7 @@ set(SOURCE_FILES
     anticarium_pi_tests/TestsUtility.cpp
     WeatherEmulatorTests.cpp
     config/ApplicationSettingsTests.cpp
+    config/DynamicSettingsTests.cpp
     ImageProcessTests.cpp
 )
 

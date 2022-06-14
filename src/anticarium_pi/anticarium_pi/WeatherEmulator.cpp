@@ -89,4 +89,5 @@ int WeatherEmulator::getCurrentMoisture() {
 }
 
 WeatherEmulator::~WeatherEmulator() {
+    weatherEmulator = nullptr;
 }

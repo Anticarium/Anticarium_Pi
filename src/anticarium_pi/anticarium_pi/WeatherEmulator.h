@@ -32,7 +32,7 @@ class WeatherEmulator : public QObject {
     void setWater(bool water);
     int getCurrentTemperatureInt();
     int getCurrentMoisture();
-    virtual ~WeatherEmulator();
+    ~WeatherEmulator();
 
     enum { FLOAT_MULTIPLIER = 100 };
 
