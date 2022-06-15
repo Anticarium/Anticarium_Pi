@@ -1,25 +1,25 @@
 #include "PIDValues.h"
 
-double PIDValues::getP() const {
+int PIDValues::getP() const {
     return p;
 }
 
-void PIDValues::setP(double p) {
+void PIDValues::setP(int p) {
     this->p = p;
 }
 
-double PIDValues::getI() const {
+int PIDValues::getI() const {
     return i;
 }
 
-void PIDValues::setI(double i) {
+void PIDValues::setI(int i) {
     this->i = i;
 }
 
-double PIDValues::getD() const {
+int PIDValues::getD() const {
     return d;
 }
 
-void PIDValues::setD(double d) {
+void PIDValues::setD(int d) {
     this->d = d;
 }

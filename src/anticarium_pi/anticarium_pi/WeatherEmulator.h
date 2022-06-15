@@ -42,6 +42,6 @@ class WeatherEmulator : public QObject {
 
     bool heat  = false;
     bool water = false;
-    std::unique_ptr<PIDController<double>> temperaturePid;
-    std::unique_ptr<PIDController<double>> moisturePid;
+    std::unique_ptr<PIDController<int>> temperaturePid;
+    std::unique_ptr<PIDController<int>> moisturePid;
 };

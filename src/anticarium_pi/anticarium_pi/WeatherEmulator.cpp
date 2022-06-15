@@ -4,19 +4,19 @@
 static WeatherEmulator* weatherEmulator = nullptr;
 
 template <>
-void PIDController<double>::registerTimeFunction(unsigned long (*)());
+void PIDController<int>::registerTimeFunction(unsigned long (*)());
 
 template <>
-void PIDController<double>::setTarget(double);
+void PIDController<int>::setTarget(int);
 
 template <>
-void PIDController<double>::tick();
+void PIDController<int>::tick();
 
-static double temperatureFeedback() {
+static int temperatureFeedback() {
     return weatherEmulator->getCurrentTemperatureInt();
 }
 
-static void temperatureOutput(double output) {
+static void temperatureOutput(int output) {
     if (output > 0) {
         weatherEmulator->setHeat(true);
     } else {
@@ -24,11 +24,11 @@ static void temperatureOutput(double output) {
     }
 }
 
-static double moistureFeedback() {
+static int moistureFeedback() {
     return weatherEmulator->getCurrentMoisture();
 }
 
-static void moistureOutput(double output) {
+static void moistureOutput(int output) {
     if (output > 0) {
         weatherEmulator->setWater(true);
     } else {
@@ -50,14 +50,14 @@ WeatherEmulator::WeatherEmulator(QObject* parent) : QObject(parent) {
     const auto dynamicSettings       = DynamicSettings::instance();
     const auto& temperaturePIDValues = dynamicSettings->getTemperaturePID();
 
-    temperaturePid = std::make_unique<PIDController<double>>(temperaturePIDValues.getP(), temperaturePIDValues.getI(), temperaturePIDValues.getD(),
-                                                             temperatureFeedback, temperatureOutput);
+    temperaturePid = std::make_unique<PIDController<int>>(temperaturePIDValues.getP(), temperaturePIDValues.getI(), temperaturePIDValues.getD(),
+                                                          temperatureFeedback, temperatureOutput);
     temperaturePid->registerTimeFunction(timeFunction);
 
     const auto& moisturePIDValues = dynamicSettings->getMoisturePID();
 
     moisturePid =
-    std::make_unique<PIDController<double>>(moisturePIDValues.getP(), moisturePIDValues.getI(), moisturePIDValues.getD(), moistureFeedback, moistureOutput);
+    std::make_unique<PIDController<int>>(moisturePIDValues.getP(), moisturePIDValues.getI(), moisturePIDValues.getD(), moistureFeedback, moistureOutput);
     moisturePid->registerTimeFunction(timeFunction);
 }
 
@@ -77,9 +77,9 @@ bool WeatherEmulator::calculateHeatToggle(float currentTempearture) {
     auto dynamicSettings      = DynamicSettings::instance();
     auto temperaturePIDValues = dynamicSettings->getTemperaturePID();
 
-    temperaturePIDValues.setP(temperaturePid->getP());
-    temperaturePIDValues.setI(temperaturePid->getI());
-    temperaturePIDValues.setD(temperaturePid->getD());
+    temperaturePIDValues.setP(temperaturePid->getProportionalComponent());
+    temperaturePIDValues.setI(temperaturePid->getIntegralComponent());
+    temperaturePIDValues.setD(temperaturePid->getDerivativeComponent());
 
     dynamicSettings->setTemperaturePID(temperaturePIDValues);
 
@@ -93,9 +93,9 @@ bool WeatherEmulator::calculateMoistureToggle(int currentMoisture) {
     auto dynamicSettings   = DynamicSettings::instance();
     auto moisturePIDValues = dynamicSettings->getMoisturePID();
 
-    moisturePIDValues.setP(moisturePid->getP());
-    moisturePIDValues.setI(moisturePid->getI());
-    moisturePIDValues.setD(moisturePid->getD());
+    moisturePIDValues.setP(moisturePid->getProportionalComponent());
+    moisturePIDValues.setI(moisturePid->getIntegralComponent());
+    moisturePIDValues.setD(moisturePid->getDerivativeComponent());
 
     dynamicSettings->setMoisturePID(moisturePIDValues);
 

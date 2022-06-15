@@ -5,13 +5,13 @@ DynamicSettings* DynamicSettings::dynamicSettings = nullptr;
 DynamicSettings::DynamicSettings(const QString& directoryPath, QObject* parent) : QObject(parent) {
     settings = new QSettings(directoryPath, QSettings::IniFormat, this);
 
-    temperaturePID.setP(settings->value("TemperatureP", 1).toDouble());
-    temperaturePID.setI(settings->value("TemperatureI", 1).toDouble());
-    temperaturePID.setD(settings->value("TemperatureD", 1).toDouble());
+    temperaturePID.setP(settings->value("TemperatureP", 1).toInt());
+    temperaturePID.setI(settings->value("TemperatureI", 1).toInt());
+    temperaturePID.setD(settings->value("TemperatureD", 1).toInt());
 
-    moisturePID.setP(settings->value("MoistureP", 1).toDouble());
-    moisturePID.setI(settings->value("MoistureI", 1).toDouble());
-    moisturePID.setD(settings->value("MoistureD", 1).toDouble());
+    moisturePID.setP(settings->value("MoistureP", 1).toInt());
+    moisturePID.setI(settings->value("MoistureI", 1).toInt());
+    moisturePID.setD(settings->value("MoistureD", 1).toInt());
 }
 
 void DynamicSettings::savePID(const PIDValues& pid, PIDType pidType) {

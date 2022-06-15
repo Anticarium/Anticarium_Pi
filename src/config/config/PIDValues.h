@@ -2,17 +2,17 @@
 
 class PIDValues {
   public:
-    double getP() const;
-    void setP(double p);
+    int getP() const;
+    void setP(int p);
 
-    double getI() const;
-    void setI(double i);
+    int getI() const;
+    void setI(int i);
 
-    double getD() const;
-    void setD(double d);
+    int getD() const;
+    void setD(int d);
 
   private:
-    double p = 0;
-    double i = 0;
-    double d = 0;
+    int p = 0;
+    int i = 0;
+    int d = 0;
 };

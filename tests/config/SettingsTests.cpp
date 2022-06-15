@@ -31,15 +31,15 @@ TEST(TestApplicationSettings, TestWrite) {
         auto dynamicSettings = DynamicSettings::instance(file.fileName(), &p);
 
         auto temperaturePID = dynamicSettings->getTemperaturePID();
-        temperaturePID.setP(0.123456789);
-        temperaturePID.setI(0.94129049012);
-        temperaturePID.setD(0.2328742142);
+        temperaturePID.setP(2);
+        temperaturePID.setI(10000);
+        temperaturePID.setD(0);
         dynamicSettings->setTemperaturePID(temperaturePID);
 
         auto moisturePID = dynamicSettings->getTemperaturePID();
-        moisturePID.setP(0.24710274972);
-        moisturePID.setI(0.6093496344976);
-        moisturePID.setD(0.9375097557957);
+        moisturePID.setP(4242);
+        moisturePID.setI(1245);
+        moisturePID.setD(23);
         dynamicSettings->setMoisturePID(moisturePID);
     }
 
@@ -47,12 +47,12 @@ TEST(TestApplicationSettings, TestWrite) {
     const auto dynamicSettings = DynamicSettings::instance(file.fileName(), &p);
 
     const auto& temperaturePID = dynamicSettings->getTemperaturePID();
-    EXPECT_EQ(temperaturePID.getP(), 0.123456789);
-    EXPECT_EQ(temperaturePID.getI(), 0.94129049012);
-    EXPECT_EQ(temperaturePID.getD(), 0.2328742142);
+    EXPECT_EQ(temperaturePID.getP(), 2);
+    EXPECT_EQ(temperaturePID.getI(), 10000);
+    EXPECT_EQ(temperaturePID.getD(), 0);
 
     const auto& moisturePID = dynamicSettings->getMoisturePID();
-    EXPECT_EQ(moisturePID.getP(), 0.24710274972);
-    EXPECT_EQ(moisturePID.getI(), 0.6093496344976);
-    EXPECT_EQ(moisturePID.getD(), 0.9375097557957);
+    EXPECT_EQ(moisturePID.getP(), 4242);
+    EXPECT_EQ(moisturePID.getI(), 1245);
+    EXPECT_EQ(moisturePID.getD(), 23);
 }
