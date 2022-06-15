@@ -1,9 +1,13 @@
 set(HEADER_FILES
     config/ApplicationSettings.h
+    config/DynamicSettings.h
+    config/PIDValues.h
 )
 
 set(SOURCE_FILES
     config/ApplicationSettings.cpp
+    config/DynamicSettings.cpp
+    config/PIDValues.cpp
 )
 
 set(TARGET_NAME anticarium_config_lib)

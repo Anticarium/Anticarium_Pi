@@ -2,7 +2,7 @@ include(ExternLibs)
 include(GoogleTest)
 
 set(TARGET_NAME anticarium_pi_tests)
-set(TEST_DATA_DIR_HEADER_PATH ${CMAKE_BINARY_DIR}/tests/include/shared_types_tests)
+set(TEST_DATA_DIR_HEADER_PATH ${CMAKE_BINARY_DIR}/tests/include)
 
 set(HEADER_FILES
     anticarium_pi_tests/TestsUtility.h
@@ -12,7 +12,7 @@ set(SOURCE_FILES
     main.cpp
     anticarium_pi_tests/TestsUtility.cpp
     WeatherEmulatorTests.cpp
-    config/ApplicationSettingsTests.cpp
+    config/SettingsTests.cpp
     ImageProcessTests.cpp
 )
 

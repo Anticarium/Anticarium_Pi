@@ -2,6 +2,7 @@
 #include <anticarium_pi/AnticariumManager.h>
 #include <anticarium_pi/Jttp.h>
 #include <config/ApplicationSettings.h>
+#include <config/DynamicSettings.h>
 #include <spdlog/sinks/daily_file_sink.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
@@ -49,6 +50,7 @@ int main(int argc, char* argv[]) {
     QCoreApplication a(argc, argv);
 
     ApplicationSettings::instance(QCoreApplication::applicationDirPath() + "/settings.ini", QCoreApplication::instance());
+    DynamicSettings::instance(QCoreApplication::applicationDirPath() + "/dynamic_settings.ini", QCoreApplication::instance());
 
     initializeLogger();
 

@@ -1,4 +1,5 @@
 #include <anticarium_pi/AnticariumManager.h>
+#include <config/DynamicSettings.h>
 
 static WeatherEmulator* weatherEmulator = nullptr;
 
@@ -45,9 +46,18 @@ static unsigned long timeFunction() {
 
 WeatherEmulator::WeatherEmulator(QObject* parent) : QObject(parent) {
     weatherEmulator = this;
-    temperaturePid  = std::make_unique<PIDController<int>>(1, 1, 1, temperatureFeedback, temperatureOutput);
+
+    const auto dynamicSettings       = DynamicSettings::instance();
+    const auto& temperaturePIDValues = dynamicSettings->getTemperaturePID();
+
+    temperaturePid = std::make_unique<PIDController<int>>(temperaturePIDValues.getP(), temperaturePIDValues.getI(), temperaturePIDValues.getD(),
+                                                          temperatureFeedback, temperatureOutput);
     temperaturePid->registerTimeFunction(timeFunction);
-    moisturePid = std::make_unique<PIDController<int>>(1, 1, 1, moistureFeedback, moistureOutput);
+
+    const auto& moisturePIDValues = dynamicSettings->getMoisturePID();
+
+    moisturePid =
+    std::make_unique<PIDController<int>>(moisturePIDValues.getP(), moisturePIDValues.getI(), moisturePIDValues.getD(), moistureFeedback, moistureOutput);
     moisturePid->registerTimeFunction(timeFunction);
 }
 
@@ -63,12 +73,32 @@ void WeatherEmulator::setTargetMoisture(int targetMoisture) {
 bool WeatherEmulator::calculateHeatToggle(float currentTempearture) {
     this->currentTemperature = static_cast<int>(currentTempearture * FLOAT_MULTIPLIER);
     temperaturePid->tick();
+
+    auto dynamicSettings      = DynamicSettings::instance();
+    auto temperaturePIDValues = dynamicSettings->getTemperaturePID();
+
+    temperaturePIDValues.setP(temperaturePid->getProportionalComponent());
+    temperaturePIDValues.setI(temperaturePid->getIntegralComponent());
+    temperaturePIDValues.setD(temperaturePid->getDerivativeComponent());
+
+    dynamicSettings->setTemperaturePID(temperaturePIDValues);
+
     return heat;
 }
 
 bool WeatherEmulator::calculateMoistureToggle(int currentMoisture) {
     this->currentMoisture = currentMoisture;
     moisturePid->tick();
+
+    auto dynamicSettings   = DynamicSettings::instance();
+    auto moisturePIDValues = dynamicSettings->getMoisturePID();
+
+    moisturePIDValues.setP(moisturePid->getProportionalComponent());
+    moisturePIDValues.setI(moisturePid->getIntegralComponent());
+    moisturePIDValues.setD(moisturePid->getDerivativeComponent());
+
+    dynamicSettings->setMoisturePID(moisturePIDValues);
+
     return water;
 }
 
@@ -89,4 +119,5 @@ int WeatherEmulator::getCurrentMoisture() {
 }
 
 WeatherEmulator::~WeatherEmulator() {
+    weatherEmulator = nullptr;
 }
