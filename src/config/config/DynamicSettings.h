@@ -1,5 +1,6 @@
 #pragma once
 #include <QSettings>
+#include <config/PIDValues.h>
 
 class DynamicSettings : public QObject {
     Q_OBJECT
@@ -10,14 +11,11 @@ class DynamicSettings : public QObject {
     static DynamicSettings* instance();
     ~DynamicSettings();
 
-    double getP() const;
-    void setP(double p);
+    const PIDValues& getTemperaturePID() const;
+    const PIDValues& getMoisturePID() const;
 
-    double getI() const;
-    void setI(double i);
-
-    double getD() const;
-    void setD(double d);
+    void setTemperaturePID(const PIDValues& pid);
+    void setMoisturePID(const PIDValues& pid);
 
   private:
     static DynamicSettings* dynamicSettings;
@@ -26,7 +24,10 @@ class DynamicSettings : public QObject {
     QSettings* settings = nullptr;
 
     // PID values
-    double p = 0;
-    double i = 0;
-    double d = 0;
+    PIDValues temperaturePID;
+    PIDValues moisturePID;
+
+    enum class PIDType { Temperature, Moisture };
+
+    void savePID(const PIDValues& pid, PIDType pidType);
 };
